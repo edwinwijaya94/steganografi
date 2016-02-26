@@ -17,13 +17,12 @@ import java.util.Arrays;
 public class MessageLoader {
     //attr
     String message;
-    static String[] byteMessage;
+    static ArrayList<String> byteMessage;
+    static ArrayList<ArrayList<String>> regions; // 8x8 pixel region
     
     public MessageLoader(){
-        byteMessage = new String[10000];
-        for(int i=0;i<10000;i++){
-            byteMessage[i] = "";
-        }
+        byteMessage = new ArrayList<String>();
+        regions = new ArrayList<ArrayList<String>>();
     }
     
     public void setMessage(String message){
@@ -35,35 +34,53 @@ public class MessageLoader {
     }
     
     // convert message to matrix of byte
-    public static void toByteMessage(String message){
-        int idxSegmen = 0;
+    public static ArrayList<String> toByteMessage(String message){
+        //int count = 0;
 	byte[] valuesDefault = message.getBytes();
         
         for(int i=0; i<valuesDefault.length; i++){
             String s = String.format("%8s", Integer.toBinaryString(valuesDefault[i] & 0xFF)).replace(' ', '0');
+            byteMessage.add(s);
+            count++;
+        }
+//        for(int i=0;i<count;i++){
+//            System.out.println(byteMessage.get(i));
+//        }
+        return byteMessage;
+    }
+    
+    public static void toRegions(ArrayList<String> byteMessage){
+        int idxSegmen = 0;
+        regions.add(new ArrayList<String>());
+        for(int i=0; i<byteMessage.size(); i++){
             if ((i != 0) && (i % 8 == 0)){
                 idxSegmen++;
-                byteMessage[idxSegmen] += s;
+                regions.add(new ArrayList<String>());
+                regions.get(idxSegmen).add(byteMessage.get(i));
             } else {
-                byteMessage[idxSegmen] += s;
+                regions.get(idxSegmen).add(byteMessage.get(i));
             }
         }
-        for(int i=0;i<=idxSegmen;i++){
-            System.out.println(byteMessage[i]);
+        for(int i=0;i<idxSegmen;i++){
+            System.out.println(regions.get(i));
         }
     }
     
-    public String[] getByteMessage(){
+    public ArrayList<String> getByteMessage(){
         return this.byteMessage;
     }
     
     public static void main(String[] args) throws UnsupportedEncodingException {
 
         MessageLoader m = new MessageLoader();
+        ArrayList<String> al = new ArrayList<String>();
 	// The string we want to convert.
 	String letters = "abcdefghijklmnopqrstuvwxyzas";
 	System.out.println(letters);
         
-        m.toByteMessage(letters);
+        al = m.toByteMessage(letters);
+        System.out.println(al);
+        
+        m.toRegions(al);
     }
 }
