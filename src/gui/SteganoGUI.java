@@ -419,7 +419,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         }
         
         //load selected file
-        BufferedImage myPicture;
+        BufferedImage myPicture = null;
         try {
             myPicture = ImageIO.read(file);
             ImageIcon icon = new ImageIcon(myPicture); 
@@ -427,7 +427,8 @@ public class SteganoGUI extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        IL.setImage(myPicture);
+        IL.toByteImage();
     }//GEN-LAST:event_openImageButtonActionPerformed
 
     private void saveButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButton1ActionPerformed
