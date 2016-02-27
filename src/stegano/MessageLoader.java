@@ -18,11 +18,20 @@ public class MessageLoader {
     //attr
     String message;
     static ArrayList<String> byteMessage;
+    static ArrayList<String> wcPattern;
     static ArrayList<ArrayList<String>> regions; // 8x8 pixel region
     
     public MessageLoader(){
         byteMessage = new ArrayList<String>();
         regions = new ArrayList<ArrayList<String>>();
+        wcPattern = new ArrayList<String>();
+        for(int i=0;i<8;i++){
+            if (i % 2 == 0){
+                wcPattern.add("01010101");
+            } else {
+                wcPattern.add("10101010");
+            }
+        }
     }
     
     public void setMessage(String message){
@@ -46,6 +55,7 @@ public class MessageLoader {
     
     public static void toRegions(ArrayList<String> byteMessage){
         int idxSegmen = 0;
+        int size = byteMessage.size();
         regions.add(new ArrayList<String>());
         for(int i=0; i<byteMessage.size(); i++){
             if ((i != 0) && (i % 8 == 0)){
@@ -56,12 +66,16 @@ public class MessageLoader {
                 regions.get(idxSegmen).add(byteMessage.get(i));
             }
         }
+        while (size % 8 != 0){
+            regions.get(idxSegmen).add("00000000");
+            size++;
+        }
         for(int i=0;i<=idxSegmen;i++){
             System.out.println(regions.get(i));
         }
     }
     
-    public int complexity(ArrayList<String> byteMessage){
+    public static int complexity(ArrayList<String> byteMessage){
         int k = 0;
         for(int i=0;i<byteMessage.size();i++){
             for(int j=0;j<byteMessage.get(i).length();j++){
@@ -103,17 +117,40 @@ public class MessageLoader {
         return k;
     }
     
-    public boolean isNoiseLikeRegion(ArrayList<String> byteMessage){
+    public static boolean isNoiseLikeRegion(ArrayList<String> byteMessage){
         double n = 112;
         double alpha;
         double threshold = 0.3;
         alpha = (double)complexity(byteMessage)/n;
-        //System.out.println(alpha);
+        System.out.println(alpha);
         
         if (alpha >= threshold){
             return true;
         } else {
             return false;
+        }
+    }
+    
+    public static String xor(String a, String b){
+        String res = new String();
+        for(int i=0;i<a.length();i++){
+            if (a.charAt(i) == b.charAt(i)){
+                res += "0";
+            } else {
+                res += "1";
+            }
+        }
+        
+        return res;
+    }
+    
+    public static void conjugateRegion(){
+        for(int i=0;i<regions.size();i++){
+            if(!isNoiseLikeRegion(regions.get(i))){
+                for(int j=0;j<8;j++){
+                    regions.get(i).set(j, xor(regions.get(i).get(j),wcPattern.get(j)));
+                }
+            }
         }
     }
     
@@ -126,11 +163,18 @@ public class MessageLoader {
         MessageLoader m = new MessageLoader();
         ArrayList<String> al = new ArrayList<String>();
 	// The string we want to convert.
-	String letters = "VincentTheophilusCiputraABC";
+	String letters = "aaaaaabbaaaaaaaa";
 	System.out.println(letters);
         
         al = m.toByteMessage(letters);
         System.out.println(al);
+        m.toRegions(al);
+        for(int i=0;i<regions.size();i++){
+            System.out.println(m.complexity(regions.get(i)));
+            System.out.println(m.isNoiseLikeRegion(regions.get(i)));
+        }
+        m.conjugateRegion();
+        System.out.println();
         m.toRegions(al);
         for(int i=0;i<regions.size();i++){
             System.out.println(m.complexity(regions.get(i)));
