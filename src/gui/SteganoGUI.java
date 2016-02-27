@@ -428,7 +428,15 @@ public class SteganoGUI extends javax.swing.JFrame {
             Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         IL.setImage(myPicture);
+        System.out.println("AAA");
         IL.toByteImage();
+        System.out.println("BBB");
+        IL.toRegions();
+        System.out.println("CCC");
+        IL.allRegionBitPlanes();
+        System.out.println("DDD");
+        IL.printArrBitPlane();
+        System.out.println("EEE");
     }//GEN-LAST:event_openImageButtonActionPerformed
 
     private void saveButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButton1ActionPerformed
