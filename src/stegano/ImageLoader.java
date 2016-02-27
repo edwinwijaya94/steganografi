@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 import java.util.ArrayList;
+import javafx.util.Pair;
 
 /**
  *
@@ -26,6 +27,7 @@ public class ImageLoader {
     ArrayList<String> bitPlane;
     ArrayList<ArrayList<String>> arrBitPlane;
     ArrayList<ArrayList<ArrayList<String>>> mtxBitPlane;
+    ArrayList<Pair<Integer,Integer>> targetBitPlane;
     int width;
     int height;
     
@@ -39,6 +41,7 @@ public class ImageLoader {
         bitPlane = new ArrayList<String>();
         arrBitPlane = new ArrayList<ArrayList<String>>();
         mtxBitPlane = new ArrayList<ArrayList<ArrayList<String>>>();
+        targetBitPlane = new ArrayList<Pair<Integer,Integer>>();
     }
     
     public void setImage(BufferedImage image){
@@ -181,6 +184,20 @@ public class ImageLoader {
 //                System.out.println(imageRegions.get(i).get(j).get(0).size());
             }
         }
+    }
+    
+    public void countComplexity(){
+        for(int i = 0;i<mtxBitPlane.size();i++){
+            for (int j = 0;j<mtxBitPlane.get(i).size();j++){
+                if (MessageLoader.isNoiseLikeRegion(mtxBitPlane.get(i).get(j))){
+                    targetBitPlane.add(new Pair(i,j));
+                }
+            }
+        }
+    }
+    
+    public void printComplexity(){
+        System.out.println(targetBitPlane);
     }
 
     public void printArrBitPlane(){

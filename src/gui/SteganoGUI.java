@@ -435,8 +435,11 @@ public class SteganoGUI extends javax.swing.JFrame {
         System.out.println("CCC");
         IL.allRegionBitPlanes();
         System.out.println("DDD");
-        IL.printArrBitPlane();
+        IL.countComplexity();
+//        IL.printArrBitPlane();
         System.out.println("EEE");
+        IL.printComplexity();
+        
     }//GEN-LAST:event_openImageButtonActionPerformed
 
     private void saveButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButton1ActionPerformed
