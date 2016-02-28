@@ -419,7 +419,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         }
         
         //load selected file
-        BufferedImage myPicture;
+        BufferedImage myPicture = null;
         try {
             myPicture = ImageIO.read(file);
             ImageIcon icon = new ImageIcon(myPicture); 
@@ -427,6 +427,18 @@ public class SteganoGUI extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        IL.setImage(myPicture);
+        System.out.println("AAA");
+        IL.toByteImage();
+        System.out.println("BBB");
+        IL.toRegions();
+        System.out.println("CCC");
+        IL.allRegionBitPlanes();
+        System.out.println("DDD");
+        IL.countComplexity();
+//        IL.printArrBitPlane();
+        System.out.println("EEE");
+        IL.printComplexity();
         
     }//GEN-LAST:event_openImageButtonActionPerformed
 
