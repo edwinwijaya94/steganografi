@@ -438,6 +438,15 @@ public class SteganoGUI extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        System.out.println("==================================================================================================================================================================================================");
+//        System.out.println(IL.binaryImage);
+        System.out.println("==================================================================================================================================================================================================");
+//        System.out.println("Byte Before");
+//        for (int i = 0;i<IL.getImageBytes().length;i++){
+//            System.out.print(IL.getImageBytes()[i] + " ");
+//        }
+        
         System.out.println("BBB");
         IL.toRegions();
         System.out.println("CCC");
@@ -456,12 +465,12 @@ public class SteganoGUI extends javax.swing.JFrame {
 	// The string we want to convert.
 	String letters = "Vincent Theophilus Ciputra";
         
-        al = ML.toByteMessage(letters);
-        ML.toRegions(al);
-        ML.conjugateRegion();
-        
-        bpcs.messageRegions = ML.regions;
-        bpcs.doStegano();
+//        al = ML.toByteMessage(letters);
+//        ML.toRegions(al);
+//        ML.conjugateRegion();
+//        
+//        bpcs.messageRegions = ML.regions;
+//        bpcs.doStegano();
         bpcs.toStegoByteArray();
   
 //        IL.printMTXBitPlaneCGC();
@@ -471,9 +480,17 @@ public class SteganoGUI extends javax.swing.JFrame {
         
 //        IL.printComplexity();
         IL.setImageBytes(bpcs.getStegoByteArray());
-        pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
+        try {
+            pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
+        } catch (IOException ex) {
+            Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         ImageIcon iconOut = new ImageIcon(pictureOutput);
         outputImageLabel.setIcon(iconOut);
+//        for (int i = 0;i<IL.getImageBytes().length;i++){
+//            System.out.print(IL.getImageBytes()[i] + " ");
+//        }
+        
         
     }//GEN-LAST:event_openImageButtonActionPerformed
 

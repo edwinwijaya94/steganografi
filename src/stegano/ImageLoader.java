@@ -27,7 +27,7 @@ public class ImageLoader {
     //attr
     BufferedImage image;
     ArrayList<ArrayList<Byte>> byteImage;
-    ArrayList<ArrayList<String>> binaryImage;
+    public ArrayList<ArrayList<String>> binaryImage;
     ArrayList<ArrayList<ArrayList<String>>> arrRegion;
     ArrayList<ArrayList<String>> region;
     ArrayList<ArrayList<ArrayList<ArrayList<String>>>> imageRegions;
@@ -65,6 +65,7 @@ public class ImageLoader {
     public void setImageBytes(byte[] imgBytes){
         imageBytes = imgBytes;
     }
+   
     
     public BufferedImage getImage(){
         return this.image;
@@ -91,7 +92,7 @@ public class ImageLoader {
                 count++;
             }
             for (int j = 0;j<width;j++){
-                String s = String.format("%32s", Integer.toBinaryString(imageBytes[countBin] & 0xFF)).replace(' ', '0');
+                String s = String.format("%8s", Integer.toBinaryString(imageBytes[countBin] & 0xFF)).replace(' ', '0');
                 tempBinary.add(s);
                 countBin++;
             }
@@ -102,6 +103,7 @@ public class ImageLoader {
     
     public void toRegions(){
         ArrayList<ArrayList<ArrayList<String>>> tempArrRegion = new ArrayList<>();
+        System.out.println("bin img size "+binaryImage.size());
         for (int i = 0;i<binaryImage.size();i++){
             if (i%8==0){
                 initArrRegion();
@@ -116,7 +118,7 @@ public class ImageLoader {
                 imageRegions.get(i/8).get(j/8).get(i%8).set(j%8,binaryImage.get(i).get(j));
             }
         }
-        //System.out.println("img regions[ijk]" +imageRegions.get(1).get(1).get(1).size());
+        System.out.println("region size" +imageRegions.get(1).size() +" " +imageRegions.size());
     }
     
     public void printRegion(ArrayList<ArrayList<String>> inputArr){
@@ -133,7 +135,7 @@ public class ImageLoader {
         for(int i = 0;i<8;i++){
             ArrayList<String> tempInput= new ArrayList<>();
             for (int j = 0;j<8;j++){
-                tempInput.add("00000000000000000000000000000000");
+                tempInput.add("00000000");
             }
             region.add(tempInput);
 //            System.out.println(tempInput.size());
@@ -147,7 +149,7 @@ public class ImageLoader {
         region = new ArrayList<>();
         initRegion();
         
-        for(int i = 0;i<Math.ceil((float)width/8);i++){
+        for(int i = 0;i<Math.ceil((float)(width*3)/8);i++){
             arrRegion.add(region);
         }
         
@@ -168,7 +170,7 @@ public class ImageLoader {
     
     public void makeArrBitPlane(ArrayList<ArrayList<String>> reg){
         arrBitPlane = new ArrayList<>();
-        for (int i = 0;i<32;i++){
+        for (int i = 0;i<8;i++){
             makeBitPlane(reg,i);
         }
     }
@@ -261,6 +263,7 @@ public class ImageLoader {
     
     public byte[] getImageBytes(){
         return imageBytes;
-    }
+    } 
+    
     
 }
