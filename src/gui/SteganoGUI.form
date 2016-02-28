@@ -112,7 +112,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="PSNRVal" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="inputImageLabel1" alignment="0" min="-2" pref="320" max="-2" attributes="0"/>
+                          <Component id="outputImageLabel" alignment="0" min="-2" pref="320" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -171,7 +171,7 @@
                           <Component id="PSNRVal" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="inputImageLabel1" min="-2" pref="320" max="-2" attributes="0"/>
+                      <Component id="outputImageLabel" min="-2" pref="320" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -421,13 +421,14 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="inputImageLabel1">
+    <Component class="javax.swing.JLabel" name="outputImageLabel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
             <LineBorder/>
           </Border>
         </Property>
+        <Property name="name" type="java.lang.String" value="" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="keyLabel4">

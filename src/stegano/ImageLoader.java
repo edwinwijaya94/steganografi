@@ -9,8 +9,12 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import javafx.util.Pair;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -30,6 +34,7 @@ public class ImageLoader {
     ArrayList<Pair<Integer,Integer>> targetBitPlane;
     int width;
     int height;
+    byte[] imageBytes;
     
     
     public ImageLoader(){
@@ -57,10 +62,15 @@ public class ImageLoader {
     }
     
     // convert image to matrix of byte
-    public void toByteImage(){
+    public void toByteImage() throws IOException{
         ArrayList<Byte> tempByte = null;
         ArrayList<String> tempBinary = null;
-        byte[] imageBytes = ((DataBufferByte) image.getData().getDataBuffer()).getData();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "bmp", baos);
+        byte[] bytes = baos.toByteArray();
+        imageBytes = new byte[bytes.length];
+        imageBytes = bytes;
+//        imageBytes = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         System.out.println(imageBytes.length);
         
         int count = 0;
@@ -186,6 +196,16 @@ public class ImageLoader {
         }
     }
     
+    public BufferedImage createImageFromBytes(byte[] imageData) {
+        ByteArrayInputStream bais = new ByteArrayInputStream(imageData);
+        System.out.println("bais " + bais);
+        try {
+            return ImageIO.read(bais);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     public void countComplexity(){
         for(int i = 0;i<mtxBitPlane.size();i++){
             for (int j = 0;j<mtxBitPlane.get(i).size();j++){
@@ -210,6 +230,10 @@ public class ImageLoader {
     
     public ArrayList<ArrayList<String>> getBinaryImage(){
         return this.binaryImage;
+    }
+    
+    public byte[] getImageBytes(){
+        return imageBytes;
     }
     
 }
