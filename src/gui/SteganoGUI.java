@@ -441,11 +441,18 @@ public class SteganoGUI extends javax.swing.JFrame {
         IL.toRegions();
         System.out.println("CCC");
         IL.allRegionBitPlanes();
-        System.out.println("DDD");
+        System.out.println("before");
         IL.countComplexity();
-//        IL.printArrBitPlane();
-        System.out.println("EEE");
-        IL.printComplexity();
+//        IL.printMTXBitPlane();
+        System.out.println("after");
+        System.out.println("CGC");
+        IL.toCGC();
+//        IL.printMTXBitPlaneCGC();
+        System.out.println("PBC");
+        IL.toPBC();
+//        IL.printMTXBitPlane();
+        
+//        IL.printComplexity();
         
         pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
         ImageIcon iconOut = new ImageIcon(pictureOutput);

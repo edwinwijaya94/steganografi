@@ -31,6 +31,7 @@ public class ImageLoader {
     ArrayList<String> bitPlane;
     ArrayList<ArrayList<String>> arrBitPlane;
     ArrayList<ArrayList<ArrayList<String>>> mtxBitPlane;
+    ArrayList<ArrayList<ArrayList<String>>> mtxBitPlaneCGC;
     ArrayList<Pair<Integer,Integer>> targetBitPlane;
     int width;
     int height;
@@ -44,6 +45,7 @@ public class ImageLoader {
         arrRegion = new ArrayList<ArrayList<ArrayList<String>>>();
         region = new ArrayList<ArrayList<String>>();
         bitPlane = new ArrayList<String>();
+        mtxBitPlaneCGC = new ArrayList<ArrayList<ArrayList<String>>>();
         arrBitPlane = new ArrayList<ArrayList<String>>();
         mtxBitPlane = new ArrayList<ArrayList<ArrayList<String>>>();
         targetBitPlane = new ArrayList<Pair<Integer,Integer>>();
@@ -191,6 +193,7 @@ public class ImageLoader {
 //                System.out.println("i "+ i + "j " + j);
                 makeArrBitPlane(imageRegions.get(i).get(j));
                 mtxBitPlane.add(arrBitPlane);
+                mtxBitPlaneCGC.add(arrBitPlane);
 //                System.out.println(imageRegions.get(i).get(j).get(0).size());
             }
         }
@@ -216,12 +219,49 @@ public class ImageLoader {
         }
     }
     
+    public void toCGC(){
+        mtxBitPlaneCGC = new ArrayList<>();
+        mtxBitPlaneCGC = (ArrayList<ArrayList<ArrayList<String>>>) mtxBitPlane.clone();
+        for (int i = 0;i<mtxBitPlane.size();i++){
+            for (int j = 0;j<mtxBitPlane.get(i).size();j++){
+                for (int k = 0;k<8;k++){
+                    String tempStr = new String();
+                    tempStr += mtxBitPlane.get(i).get(j).get(k).charAt(0);
+                    tempStr += MessageLoader.xor(mtxBitPlane.get(i).get(j).get(k).substring(1, 8), mtxBitPlane.get(i).get(j).get(k).substring(0, 7));
+//                    System.out.println("tempStr " + tempStr);
+                    mtxBitPlaneCGC.get(i).get(j).set(k, tempStr);
+                }                
+            }
+        }
+    }
+    
+    public void toPBC(){
+        for (int i = 0;i<mtxBitPlane.size();i++){
+            for (int j = 0;j<mtxBitPlane.get(i).size();j++){
+                System.out.println("[");
+                for (int k = 0;k<8;k++){
+                    String tempStr = new String();
+                    tempStr += mtxBitPlane.get(i).get(j).get(k).charAt(0);
+                    tempStr += MessageLoader.xor(mtxBitPlaneCGC.get(i).get(j).get(k).substring(1, 8), mtxBitPlane.get(i).get(j).get(k).substring(0, 7));
+                    System.out.println(mtxBitPlaneCGC.get(i).get(j).get(k).substring(1, 8) + " XOR " + mtxBitPlane.get(i).get(j).get(k).substring(0, 7));
+                    System.out.println("tempStr " + tempStr);
+                    mtxBitPlane.get(i).get(j).set(k, tempStr);
+                }                
+                System.out.println("]");
+            }
+        }
+    }
+    
     public void printComplexity(){
         System.out.println(targetBitPlane);
     }
 
-    public void printArrBitPlane(){
+    public void printMTXBitPlane(){
         System.out.println(mtxBitPlane);
+    }
+    
+    public void printMTXBitPlaneCGC(){
+        System.out.println(mtxBitPlaneCGC);
     }
     
     public ArrayList<ArrayList<Byte>> getByteImage(){
