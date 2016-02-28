@@ -9,6 +9,7 @@ import stegano.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -78,7 +79,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         inputThreshold = new javax.swing.JTextField();
         inputImageLabel = new javax.swing.JLabel();
-        inputImageLabel1 = new javax.swing.JLabel();
+        outputImageLabel = new javax.swing.JLabel();
         keyLabel4 = new javax.swing.JLabel();
         saveButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -202,7 +203,8 @@ public class SteganoGUI extends javax.swing.JFrame {
 
         inputImageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        inputImageLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        outputImageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        outputImageLabel.setName(""); // NOI18N
 
         keyLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         keyLabel4.setText("Output Message:");
@@ -283,7 +285,7 @@ public class SteganoGUI extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(PSNRVal))
-                            .addComponent(inputImageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(outputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -327,7 +329,7 @@ public class SteganoGUI extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(PSNRVal))
                         .addGap(18, 18, 18)
-                        .addComponent(inputImageLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(outputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(saveButton)
@@ -419,6 +421,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         }
         
         //load selected file
+        BufferedImage pictureOutput = null;
         BufferedImage myPicture = null;
         try {
             myPicture = ImageIO.read(file);
@@ -429,7 +432,11 @@ public class SteganoGUI extends javax.swing.JFrame {
         }
         IL.setImage(myPicture);
         System.out.println("AAA");
-        IL.toByteImage();
+        try {
+            IL.toByteImage();
+        } catch (IOException ex) {
+            Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println("BBB");
         IL.toRegions();
         System.out.println("CCC");
@@ -439,6 +446,10 @@ public class SteganoGUI extends javax.swing.JFrame {
 //        IL.printArrBitPlane();
         System.out.println("EEE");
         IL.printComplexity();
+        
+        pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
+        ImageIcon iconOut = new ImageIcon(pictureOutput);
+        outputImageLabel.setIcon(iconOut);
         
     }//GEN-LAST:event_openImageButtonActionPerformed
 
@@ -492,7 +503,6 @@ public class SteganoGUI extends javax.swing.JFrame {
     private javax.swing.JRadioButton extractMesssageOption;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JLabel inputImageLabel;
-    private javax.swing.JLabel inputImageLabel1;
     private javax.swing.JTextField inputKey;
     private javax.swing.JTextArea inputMessage;
     private javax.swing.JTextField inputThreshold;
@@ -508,6 +518,7 @@ public class SteganoGUI extends javax.swing.JFrame {
     private javax.swing.JLabel keyLabel4;
     private javax.swing.JButton openImageButton;
     private javax.swing.JButton openMessageButton;
+    private javax.swing.JLabel outputImageLabel;
     private javax.swing.JTextArea outputMessage;
     private javax.swing.JButton saveButton;
     private javax.swing.JButton saveButton1;
