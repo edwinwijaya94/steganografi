@@ -55,6 +55,26 @@ public class MessageLoader {
         return byteMessage;
     }
     
+    public static String toStringMessage(ArrayList<String> segmen){
+        String output = "";
+        for(int i=0;i<segmen.size();i++){
+            for(int j=0;j<=segmen.get(i).length()-8;j+=8){
+                int k = Integer.parseInt(segmen.get(i).substring(j, j+8), 2);
+                output += (char) k;
+            } 
+        }
+        
+        return output;
+    }
+    
+    public static void printMessage(ArrayList<ArrayList<String>> region){
+        String s = "";
+        for(int i=0;i<region.size();i++){
+            s += toStringMessage(region.get(i));
+        }
+        System.out.println(s);
+    }
+    
     public static void toRegions(ArrayList<String> byteMessage){
         int idxSegmen = 0;
         int size = byteMessage.size();
@@ -126,7 +146,6 @@ public class MessageLoader {
         double alpha;
         double threshold = 0.3;
         alpha = (double)complexity(byteMessage)/n;
-//        System.out.println(alpha);
         
         if (alpha >= threshold){
             return true;
@@ -183,7 +202,7 @@ public class MessageLoader {
         MessageLoader m = new MessageLoader();
         ArrayList<String> al = new ArrayList<String>();
 	// The string we want to convert.
-	String letters = "aaaaaaaaaaaaaaaa";
+	String letters = "Vincent Theophilus Ciputra";
 	System.out.println(letters);
         
         al = m.toByteMessage(letters);
@@ -193,19 +212,23 @@ public class MessageLoader {
             System.out.println(m.complexity(regions.get(i)));
             System.out.println(m.isNoiseLikeRegion(regions.get(i)));
         }
-        m.conjugateRegion();
+        printMessage(regions);
         System.out.println();
-        for(int i=0;i<2;i++){
-            System.out.println(regions.get(i));
-        }
+        System.out.println("Conjugate Region:");
+        m.conjugateRegion();
         for(int i=0;i<regions.size();i++){
             System.out.println(m.complexity(regions.get(i)));
             System.out.println(m.isNoiseLikeRegion(regions.get(i)));
         }
+        printMessage(regions);
         System.out.println();
-        for(int i=0;i<1;i++){
-            System.out.println(m.complexity(wcPattern));
-            System.out.println(m.isNoiseLikeRegion(wcPattern));
+        m.reverseConjugateRegion();
+        System.out.println();
+        System.out.println("Reverse Conjugate Region:");
+        for(int i=0;i<regions.size();i++){
+            System.out.println(m.complexity(regions.get(i)));
+            System.out.println(m.isNoiseLikeRegion(regions.get(i)));
         }
+        printMessage(regions);
     }
 }
