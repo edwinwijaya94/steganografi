@@ -19,7 +19,7 @@ public class BPCS {
     byte[] stegoByteArray;
     ArrayList<ArrayList<ArrayList<String>>> imageMtxBitPlane; // image bit planes from all regions
     ArrayList<Pair<Integer,Integer>> imageTargetBitPlane; // target bit plane
-    ArrayList<ArrayList<String>> messageRegions; // message in region format
+    public ArrayList<ArrayList<String>> messageRegions; // message in region format
     int imageWidth;
     
     // temp
@@ -80,28 +80,48 @@ public class BPCS {
     }
     
     public void toStegoByteArray(){
+        //System.out.println("bitplane " +imageMtxBitPlane.size());
         for(int i=0; i<imageMtxBitPlane.size(); i++){
             
-            if(i%imageWidth == 0){ // allocate new image row
+            if(i%(Math.ceil((float)imageWidth/8)) == 0){ // allocate new image row
+                initArrRegion();
                 stegoRegions.addAll(arrRegion);
             }
             
             // convert arr bit plane to byte region
             String[][] tempReg = new String[8][8];
+            for(int x=0; x<8; x++){
+                for(int y=0; y<8; y++)
+                    tempReg[x][y]="";
+            }
+            System.out.println("img bit i" +imageMtxBitPlane.get(i).size());
             for(int j=0; j<imageMtxBitPlane.get(i).size(); j++){
                 ArrayList<String>curBitPlane = imageMtxBitPlane.get(i).get(j); // current bit plane
-                
+                //System.out.println(curBitPlane.get(0));
                 // append cur bit plane to temp region
                 for(int k=0; k<8; k++){
                     for(int l=0; l<8; l++){
                         tempReg[k][l] += curBitPlane.get(k).charAt(l);
+                        //System.out.println("temp reg " +tempReg[k][l].length());
                     }
                 }
             }
             //put to region
             ArrayList<ArrayList<String>> Reg = new ArrayList<>();
-            for(int k=0; k<imageMtxBitPlane.get(i).size(); k++){
-                Reg.get(k).addAll(Arrays.asList(tempReg[k]));
+            
+            for(int k=0; k<8; k++){
+                ArrayList<String> dummy = new ArrayList<String>();
+                for(int p = 0;p<8;p++){
+                    dummy.add("");
+                }
+                Reg.add(dummy);
+            }
+            
+            for(int k=0; k<8; k++){
+                for(int l=0; l<8; l++){
+                    //System.out.println("temp reg "+tempReg[k][l].length());
+                  Reg.get(k).set(l,tempReg[k][l]);
+                }
             }
             stegoRegions.set(i, Reg);
         }
@@ -111,8 +131,10 @@ public class BPCS {
         for(int i=0; i<stegoRegions.size(); i++){
             //get from a region
             for(int j=0; j<8; j++){
-                for(int k=0; k<8; k++)
-                    tempByteArray.add(Byte.parseByte(stegoRegions.get(i).get(j).get(k),2)); //binary string to byte
+                for(int k=0; k<8; k++){
+                    //System.out.println("stegoreg" + stegoRegions.get(i).get(j).get(k));
+                    tempByteArray.add((byte)Integer.parseInt(stegoRegions.get(i).get(j).get(k),2)); //binary string to byte
+                }
             }
         }
         

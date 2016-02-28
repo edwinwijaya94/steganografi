@@ -6,11 +6,14 @@
 package stegano;
 
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.util.Pair;
@@ -30,11 +33,11 @@ public class ImageLoader {
     ArrayList<ArrayList<ArrayList<ArrayList<String>>>> imageRegions;
     ArrayList<String> bitPlane;
     ArrayList<ArrayList<String>> arrBitPlane;
-    ArrayList<ArrayList<ArrayList<String>>> mtxBitPlane;
-    ArrayList<ArrayList<ArrayList<String>>> mtxBitPlaneCGC;
+    public ArrayList<ArrayList<ArrayList<String>>> mtxBitPlane;
+    public ArrayList<ArrayList<ArrayList<String>>> mtxBitPlaneCGC;
     ArrayList<Pair<Integer,Integer>> targetBitPlane;
-    int width;
-    int height;
+    public int width;
+    public int height;
     byte[] imageBytes;
     
     
@@ -45,9 +48,9 @@ public class ImageLoader {
         arrRegion = new ArrayList<ArrayList<ArrayList<String>>>();
         region = new ArrayList<ArrayList<String>>();
         bitPlane = new ArrayList<String>();
-        mtxBitPlaneCGC = new ArrayList<ArrayList<ArrayList<String>>>();
         arrBitPlane = new ArrayList<ArrayList<String>>();
         mtxBitPlane = new ArrayList<ArrayList<ArrayList<String>>>();
+        mtxBitPlaneCGC = new ArrayList<ArrayList<ArrayList<String>>>();
         targetBitPlane = new ArrayList<Pair<Integer,Integer>>();
     }
     
@@ -57,6 +60,10 @@ public class ImageLoader {
         this.height = image.getHeight();
         System.out.println("width" + width);
         System.out.println("height" + height);
+    }
+    
+    public void setImageBytes(byte[] imgBytes){
+        imageBytes = imgBytes;
     }
     
     public BufferedImage getImage(){
@@ -72,7 +79,6 @@ public class ImageLoader {
         byte[] bytes = baos.toByteArray();
         imageBytes = new byte[bytes.length];
         imageBytes = bytes;
-//        imageBytes = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         System.out.println(imageBytes.length);
         
         int count = 0;
@@ -89,48 +95,28 @@ public class ImageLoader {
                 tempBinary.add(s);
                 countBin++;
             }
-//            System.out.println(tempBinary);
-//            System.out.println("before" + binaryImage.size());
             binaryImage.add(tempBinary);
-//            System.out.println(tempBinary);
-//            System.out.println("after" + binaryImage.size());
             byteImage.add(tempByte);
-//            System.out.println(binaryImage.size());
-//            System.out.println(binaryImage.get(1).size());
-//            tempByte.clear();
-//            tempBinary.clear();
         }
-//        System.out.println(binaryImage);
     }
     
     public void toRegions(){
         ArrayList<ArrayList<ArrayList<String>>> tempArrRegion = new ArrayList<>();
-        ArrayList<ArrayList<String>> tempRegion = null;
-//         System.out.println(binaryImage.get(1).size());
         for (int i = 0;i<binaryImage.size();i++){
             if (i%8==0){
                 initArrRegion();
-//                System.out.println("Arr Reg" +arrRegion.size());
+                System.out.println("arrRegSizeBefore" + arrRegion.size());
+                
                 imageRegions.add(arrRegion);
                 arrRegion = new ArrayList<>();
+                //System.out.println("arrRegSizeAfter" + arrRegion.size());
             }
-//            System.out.println(imageRegions.get(i/8).size());
             
             for(int j=0;j<binaryImage.get(i).size();j++){
-//                if (j%8==0){
-//                    tempRegion = initRegion(tempRegion);
-//                    imageRegions.get(i).add(tempRegion);
-//                }
-//                System.out.println(binaryImage.get(i).get(j));
-//                System.out.println("i,j " + i/8 + " " + j/8);
-//                System.out.println(binaryImage.get(i).get(j));
                 imageRegions.get(i/8).get(j/8).get(i%8).set(j%8,binaryImage.get(i).get(j));
-//                System.out.println("img reg" + imageRegions.get(i/8).get(j/8).get(i%8).get(j%8));
-//                printRegion(imageRegions.get(i/8).get(j/8));
             }
-            
         }
-        System.out.println(imageRegions.get(1).size());
+        //System.out.println("img regions[ijk]" +imageRegions.get(1).get(1).get(1).size());
     }
     
     public void printRegion(ArrayList<ArrayList<String>> inputArr){
@@ -150,63 +136,67 @@ public class ImageLoader {
                 tempInput.add("00000000000000000000000000000000");
             }
             region.add(tempInput);
-            System.out.println(tempInput.size());
+//            System.out.println(tempInput.size());
         }
+        
+//        System.out.println("region size"+region.size());
         
     }
     
     public void initArrRegion(){
-        ArrayList<ArrayList<String>> tempInput= new ArrayList<ArrayList<String>>();
+        region = new ArrayList<>();
         initRegion();
+        
         for(int i = 0;i<Math.ceil((float)width/8);i++){
             arrRegion.add(region);
         }
+        
+        //System.out.println("arrreg i"+arrRegion.get(1).size());
     }
     
     public void makeBitPlane(ArrayList<ArrayList<String>> reg,int bitPlaneIdx){
-        bitPlane =  new ArrayList();
+        bitPlane =  new ArrayList<>();
         for (int i =0;i<reg.size();i++){
             String temp="";
-//            System.out.println(reg.get(i).size());
             for (int j = 0;j<reg.get(i).size();j++){
                 temp+= reg.get(i).get(j).charAt(bitPlaneIdx);
             }
             bitPlane.add(temp);
-//            System.out.println(temp);
         }
         arrBitPlane.add(bitPlane);
     }
     
     public void makeArrBitPlane(ArrayList<ArrayList<String>> reg){
-        arrBitPlane = new ArrayList();
+        arrBitPlane = new ArrayList<>();
         for (int i = 0;i<32;i++){
             makeBitPlane(reg,i);
         }
     }
     
     public void allRegionBitPlanes(){
-//        System.out.println(imageRegions.size());
-//        System.out.println(imageRegions.get(1).size());
-//        System.out.println(imageRegions.get(0).get(0));
         for (int i = 0;i<imageRegions.size();i++){
             for (int j = 0;j<imageRegions.get(i).size();j++){
-//                System.out.println("i "+ i + "j " + j);
                 makeArrBitPlane(imageRegions.get(i).get(j));
+                //System.out.println("img reg i j size"+ imageRegions.get(i).get(j).size());
                 mtxBitPlane.add(arrBitPlane);
                 mtxBitPlaneCGC.add(arrBitPlane);
-//                System.out.println(imageRegions.get(i).get(j).get(0).size());
             }
         }
     }
     
-    public BufferedImage createImageFromBytes(byte[] imageData) {
-        ByteArrayInputStream bais = new ByteArrayInputStream(imageData);
-        System.out.println("bais " + bais);
-        try {
-            return ImageIO.read(bais);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public BufferedImage createImageFromBytes(byte[] imageData) throws IOException {
+//        ByteArrayInputStream bais = new ByteArrayInputStream(imageData);
+//        System.out.println("bais " + bais);
+//        try {
+//            return ImageIO.read(bais);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+        BufferedImage newImg = null;
+        newImg = new BufferedImage(height,width,BufferedImage.TYPE_4BYTE_ABGR);
+        newImg.setData(Raster.createRaster(newImg.getSampleModel(), new DataBufferByte(imageData,imageData.length), new Point()));
+        ImageIO.write(newImg, "bmp",new File("newPict.bmp"));
+        return newImg;
     }
     
     public void countComplexity(){
@@ -220,15 +210,12 @@ public class ImageLoader {
     }
     
     public void toCGC(){
-        mtxBitPlaneCGC = new ArrayList<>();
-        mtxBitPlaneCGC = (ArrayList<ArrayList<ArrayList<String>>>) mtxBitPlane.clone();
         for (int i = 0;i<mtxBitPlane.size();i++){
             for (int j = 0;j<mtxBitPlane.get(i).size();j++){
                 for (int k = 0;k<8;k++){
                     String tempStr = new String();
                     tempStr += mtxBitPlane.get(i).get(j).get(k).charAt(0);
                     tempStr += MessageLoader.xor(mtxBitPlane.get(i).get(j).get(k).substring(1, 8), mtxBitPlane.get(i).get(j).get(k).substring(0, 7));
-//                    System.out.println("tempStr " + tempStr);
                     mtxBitPlaneCGC.get(i).get(j).set(k, tempStr);
                 }                
             }

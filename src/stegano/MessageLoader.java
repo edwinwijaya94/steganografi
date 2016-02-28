@@ -17,10 +17,10 @@ import java.util.Arrays;
 public class MessageLoader {
     //attr
     String message;
-    static ArrayList<String> byteMessage;
-    static ArrayList<String> wcPattern;
-    static ArrayList<Integer> conjugationMap;
-    static ArrayList<ArrayList<String>> regions; // 8x8 pixel region
+    ArrayList<String> byteMessage;
+    ArrayList<String> wcPattern;
+    ArrayList<Integer> conjugationMap;
+    public ArrayList<ArrayList<String>> regions; // 8x8 pixel region
     
     public MessageLoader(){
         byteMessage = new ArrayList<String>();
@@ -45,7 +45,7 @@ public class MessageLoader {
     }
     
     // convert message to matrix of byte
-    public static ArrayList<String> toByteMessage(String message){
+    public ArrayList<String> toByteMessage(String message){
 	byte[] valuesDefault = message.getBytes();
         
         for(int i=0; i<valuesDefault.length; i++){
@@ -55,7 +55,7 @@ public class MessageLoader {
         return byteMessage;
     }
     
-    public static String toStringMessage(ArrayList<String> segmen){
+    public String toStringMessage(ArrayList<String> segmen){
         String output = "";
         for(int i=0;i<segmen.size();i++){
             for(int j=0;j<=segmen.get(i).length()-8;j+=8){
@@ -67,7 +67,7 @@ public class MessageLoader {
         return output;
     }
     
-    public static void printMessage(ArrayList<ArrayList<String>> region){
+    public void printMessage(ArrayList<ArrayList<String>> region){
         String s = "";
         for(int i=0;i<region.size();i++){
             s += toStringMessage(region.get(i));
@@ -75,7 +75,7 @@ public class MessageLoader {
         System.out.println(s);
     }
     
-    public static void toRegions(ArrayList<String> byteMessage){
+    public void toRegions(ArrayList<String> byteMessage){
         int idxSegmen = 0;
         int size = byteMessage.size();
         regions.add(new ArrayList<String>());
@@ -167,7 +167,7 @@ public class MessageLoader {
         return res;
     }
     
-    public static void conjugateRegion(){
+    public void conjugateRegion(){
         for(int i=0;i<regions.size();i++){
             if(!isNoiseLikeRegion(regions.get(i))){
                 conjugationMap.add(i);
@@ -178,7 +178,7 @@ public class MessageLoader {
         }
     }
     
-    public static void reverseConjugateRegion(){
+    public void reverseConjugateRegion(){
         int idxConjugate = 0;
         if(!conjugationMap.isEmpty()){
             for(int i=0;i<regions.size();i++){
@@ -197,7 +197,7 @@ public class MessageLoader {
         return this.byteMessage;
     }
     
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public void main(String[] args) throws UnsupportedEncodingException {
 
         MessageLoader m = new MessageLoader();
         ArrayList<String> al = new ArrayList<String>();

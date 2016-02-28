@@ -42,6 +42,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         VC = new VigenereCipher();
         IL = new ImageLoader();
         ML = new MessageLoader();
+        bpcs = new BPCS();
     }
 
     /**
@@ -446,14 +447,30 @@ public class SteganoGUI extends javax.swing.JFrame {
 //        IL.printMTXBitPlane();
         System.out.println("after");
         System.out.println("CGC");
-        IL.toCGC();
+        //IL.toCGC();
+//        System.out.println("bitplane IL " + IL.mtxBitPlane.size());
+        bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width);
+        
+        //get message
+         ArrayList<String> al = new ArrayList<String>();
+	// The string we want to convert.
+	String letters = "Vincent Theophilus Ciputra";
+        
+        al = ML.toByteMessage(letters);
+        ML.toRegions(al);
+        ML.conjugateRegion();
+        
+        bpcs.messageRegions = ML.regions;
+        bpcs.doStegano();
+        bpcs.toStegoByteArray();
+  
 //        IL.printMTXBitPlaneCGC();
         System.out.println("PBC");
-        IL.toPBC();
+        //IL.toPBC();
 //        IL.printMTXBitPlane();
         
 //        IL.printComplexity();
-        
+        IL.setImageBytes(bpcs.getStegoByteArray());
         pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
         ImageIcon iconOut = new ImageIcon(pictureOutput);
         outputImageLabel.setIcon(iconOut);
