@@ -6,6 +6,7 @@
 package stegano;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.util.Pair;
 
 /**
@@ -15,12 +16,27 @@ import javafx.util.Pair;
 public class BPCS {
     //attr
     float threshold;
-    ArrayList<ArrayList<Byte>> stegoImage;
+    byte[] stegoByteArray;
     ArrayList<ArrayList<ArrayList<String>>> imageMtxBitPlane; // image bit planes from all regions
     ArrayList<Pair<Integer,Integer>> imageTargetBitPlane; // target bit plane
-    static ArrayList<ArrayList<String>> messageRegions; // message in region format
-    public BPCS(){
+    ArrayList<ArrayList<String>> messageRegions; // message in region format
+    int imageWidth;
     
+    // temp
+    ArrayList<ArrayList<String>> region;
+    ArrayList<ArrayList<ArrayList<String>>> arrRegion;
+    ArrayList<ArrayList<ArrayList<String>>> stegoRegions; // one dimensional regions
+    
+    
+    public BPCS(){
+        this.imageMtxBitPlane  = new ArrayList<>(); 
+        this.imageTargetBitPlane  = new ArrayList<>();
+        this.messageRegions  = new ArrayList<>();
+        
+        //temp
+        region = new ArrayList<>();
+        arrRegion = new ArrayList<>();
+        stegoRegions = new ArrayList<>();
     }
     
     public void setThreshold(float threshold){
@@ -31,8 +47,9 @@ public class BPCS {
         return this.threshold;
     }
     
-    public void setImageMtxBitPlane(ArrayList<ArrayList<ArrayList<String>>> imageMtxBitPlane){
+    public void setImageMtxBitPlane(ArrayList<ArrayList<ArrayList<String>>> imageMtxBitPlane, int imageWidth){
         this.imageMtxBitPlane = imageMtxBitPlane;
+        this.imageWidth = imageWidth;
     }
     
     public ArrayList<ArrayList<ArrayList<String>>> getImageMtxBitPlane(){
@@ -62,10 +79,75 @@ public class BPCS {
         return 1; // OK
     }
     
-    public ArrayList<ArrayList<Byte>> getStegoImage(){
-        return this.stegoImage;
-    }
+    public void toStegoByteArray(){
+        for(int i=0; i<imageMtxBitPlane.size(); i++){
             
+            if(i%imageWidth == 0){ // allocate new image row
+                stegoRegions.addAll(arrRegion);
+            }
+            
+            // convert arr bit plane to byte region
+            String[][] tempReg = new String[8][8];
+            for(int j=0; j<imageMtxBitPlane.get(i).size(); j++){
+                ArrayList<String>curBitPlane = imageMtxBitPlane.get(i).get(j); // current bit plane
+                
+                // append cur bit plane to temp region
+                for(int k=0; k<8; k++){
+                    for(int l=0; l<8; l++){
+                        tempReg[k][l] += curBitPlane.get(k).charAt(l);
+                    }
+                }
+            }
+            //put to region
+            ArrayList<ArrayList<String>> Reg = new ArrayList<>();
+            for(int k=0; k<imageMtxBitPlane.get(i).size(); k++){
+                Reg.get(k).addAll(Arrays.asList(tempReg[k]));
+            }
+            stegoRegions.set(i, Reg);
+        }
+        
+        // convert regions to byte array
+        ArrayList<Byte> tempByteArray= new ArrayList<>();
+        for(int i=0; i<stegoRegions.size(); i++){
+            //get from a region
+            for(int j=0; j<8; j++){
+                for(int k=0; k<8; k++)
+                    tempByteArray.add(Byte.parseByte(stegoRegions.get(i).get(j).get(k),2)); //binary string to byte
+            }
+        }
+        
+        stegoByteArray = new byte[tempByteArray.size()];
+        for (int i = 0; i < tempByteArray.size(); i++) {
+            stegoByteArray[i] = tempByteArray.get(i);
+        }
+        
+    }
+    
+    public byte[] getStegoByteArray(){
+        return this.stegoByteArray;
+    }
+    
+    public void initRegion(){
+        
+        for(int i = 0;i<8;i++){
+            ArrayList<String> tempInput= new ArrayList<>();
+            for (int j = 0;j<8;j++){
+                tempInput.add("00000000000000000000000000000000");
+            }
+            region.add(tempInput);
+            System.out.println(tempInput.size());
+        }
+    }
+    
+    public void initArrRegion(){
+        ArrayList<ArrayList<String>> tempInput= new ArrayList<ArrayList<String>>();
+        initRegion();
+        for(int i = 0;i<Math.ceil((float)imageWidth/8);i++){
+            arrRegion.add(region);
+        }
+    }
+    
+    
     // count PSNR val
     public float getPSNR(){
         
