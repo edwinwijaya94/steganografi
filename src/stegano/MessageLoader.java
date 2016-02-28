@@ -19,11 +19,13 @@ public class MessageLoader {
     String message;
     static ArrayList<String> byteMessage;
     static ArrayList<String> wcPattern;
+    static ArrayList<Integer> conjugationMap;
     static ArrayList<ArrayList<String>> regions; // 8x8 pixel region
     
     public MessageLoader(){
         byteMessage = new ArrayList<String>();
         regions = new ArrayList<ArrayList<String>>();
+        conjugationMap = new ArrayList<Integer>();
         wcPattern = new ArrayList<String>();
         for(int i=0;i<8;i++){
             if (i % 2 == 0){
@@ -51,6 +53,26 @@ public class MessageLoader {
             byteMessage.add(s);
         }
         return byteMessage;
+    }
+    
+    public static String toStringMessage(ArrayList<String> segmen){
+        String output = "";
+        for(int i=0;i<segmen.size();i++){
+            for(int j=0;j<=segmen.get(i).length()-8;j+=8){
+                int k = Integer.parseInt(segmen.get(i).substring(j, j+8), 2);
+                output += (char) k;
+            } 
+        }
+        
+        return output;
+    }
+    
+    public static void printMessage(ArrayList<ArrayList<String>> region){
+        String s = "";
+        for(int i=0;i<region.size();i++){
+            s += toStringMessage(region.get(i));
+        }
+        System.out.println(s);
     }
     
     public static void toRegions(ArrayList<String> byteMessage){
@@ -83,7 +105,8 @@ public class MessageLoader {
                     if ((j < byteMessage.get(i).length()-1) && (i < byteMessage.size()-1)){
                         if (byteMessage.get(i).charAt(j+1) == '1'){
                             k++;
-                        } else if (byteMessage.get(i+1).charAt(j) == '1'){
+                        }
+                        if (byteMessage.get(i+1).charAt(j) == '1'){
                             k++;
                         }
                     } else if ((j < byteMessage.get(i).length()-1) && (i == byteMessage.size()-1)){
@@ -99,7 +122,8 @@ public class MessageLoader {
                     if ((j < byteMessage.get(i).length()-1) && (i < byteMessage.size()-1)){
                         if (byteMessage.get(i).charAt(j+1) == '0'){
                             k++;
-                        } else if (byteMessage.get(i+1).charAt(j) == '0'){
+                        }
+                        if (byteMessage.get(i+1).charAt(j) == '0'){
                             k++;
                         }
                     } else if ((j < byteMessage.get(i).length()-1) && (i == byteMessage.size()-1)){
@@ -122,7 +146,6 @@ public class MessageLoader {
         double alpha;
         double threshold = 0.3;
         alpha = (double)complexity(byteMessage)/n;
-        System.out.println(alpha);
         
         if (alpha >= threshold){
             return true;
@@ -147,11 +170,27 @@ public class MessageLoader {
     public static void conjugateRegion(){
         for(int i=0;i<regions.size();i++){
             if(!isNoiseLikeRegion(regions.get(i))){
+                conjugationMap.add(i);
                 for(int j=0;j<8;j++){
                     regions.get(i).set(j, xor(regions.get(i).get(j),wcPattern.get(j)));
                 }
             }
         }
+    }
+    
+    public static void reverseConjugateRegion(){
+        int idxConjugate = 0;
+        if(!conjugationMap.isEmpty()){
+            for(int i=0;i<regions.size();i++){
+                if(i == conjugationMap.get(idxConjugate)){
+                    for(int j=0;j<8;j++){
+                        regions.get(i).set(j, xor(regions.get(i).get(j),wcPattern.get(j)));
+                    }
+                    idxConjugate++;
+                }
+            }
+        }
+        
     }
     
     public ArrayList<String> getByteMessage(){
@@ -163,7 +202,7 @@ public class MessageLoader {
         MessageLoader m = new MessageLoader();
         ArrayList<String> al = new ArrayList<String>();
 	// The string we want to convert.
-	String letters = "aaaaaabbaaaaaaaa";
+	String letters = "Vincent Theophilus Ciputra";
 	System.out.println(letters);
         
         al = m.toByteMessage(letters);
@@ -173,12 +212,23 @@ public class MessageLoader {
             System.out.println(m.complexity(regions.get(i)));
             System.out.println(m.isNoiseLikeRegion(regions.get(i)));
         }
-        m.conjugateRegion();
+        printMessage(regions);
         System.out.println();
-        m.toRegions(al);
+        System.out.println("Conjugate Region:");
+        m.conjugateRegion();
         for(int i=0;i<regions.size();i++){
             System.out.println(m.complexity(regions.get(i)));
             System.out.println(m.isNoiseLikeRegion(regions.get(i)));
         }
+        printMessage(regions);
+        System.out.println();
+        m.reverseConjugateRegion();
+        System.out.println();
+        System.out.println("Reverse Conjugate Region:");
+        for(int i=0;i<regions.size();i++){
+            System.out.println(m.complexity(regions.get(i)));
+            System.out.println(m.isNoiseLikeRegion(regions.get(i)));
+        }
+        printMessage(regions);
     }
 }
