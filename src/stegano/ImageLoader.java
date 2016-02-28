@@ -80,7 +80,7 @@ public class ImageLoader {
         byte[] bytes = baos.toByteArray();
         imageBytes = new byte[bytes.length];
         imageBytes = bytes;
-        System.out.println(imageBytes.length);
+        //System.out.println(imageBytes.length);
         
         int count = 0;
         int countBin = 0;
@@ -92,13 +92,20 @@ public class ImageLoader {
                 count++;
             }
             for (int j = 0;j<width;j++){
+//                if(j%4 == 0){
+//                    String s= "11111111"; // alpha
+//                    tempBinary.add(s);
+//                }
                 String s = String.format("%8s", Integer.toBinaryString(imageBytes[countBin] & 0xFF)).replace(' ', '0');
                 tempBinary.add(s);
                 countBin++;
             }
             binaryImage.add(tempBinary);
+            
             byteImage.add(tempByte);
         }
+//        this.width = binaryImage.get(0).size();
+//        this.height = binaryImage.size();
     }
     
     public void toRegions(){
@@ -187,15 +194,9 @@ public class ImageLoader {
     }
     
     public BufferedImage createImageFromBytes(byte[] imageData) throws IOException {
-//        ByteArrayInputStream bais = new ByteArrayInputStream(imageData);
-//        System.out.println("bais " + bais);
-//        try {
-//            return ImageIO.read(bais);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+
         BufferedImage newImg = null;
-        newImg = new BufferedImage(height,width,BufferedImage.TYPE_4BYTE_ABGR);
+        newImg = new BufferedImage(height,width,BufferedImage.TYPE_3BYTE_BGR);
         newImg.setData(Raster.createRaster(newImg.getSampleModel(), new DataBufferByte(imageData,imageData.length), new Point()));
         ImageIO.write(newImg, "bmp",new File("newPict.bmp"));
         return newImg;

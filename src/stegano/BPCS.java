@@ -83,11 +83,12 @@ public class BPCS {
         System.out.println("bitplane " +imageMtxBitPlane.size());
         for(int i=0; i<imageMtxBitPlane.size(); i++){
             
-            if(i%(Math.ceil((float)imageWidth/8)) == 0){ // allocate new image row
+            if(i%(Math.ceil((float)(imageWidth*3)/8)) == 0){ // allocate new image row
                 initArrRegion();
                 stegoRegions.addAll(arrRegion);
+                arrRegion = new ArrayList<>();
             }
-            
+            System.out.println("stego regions " +stegoRegions.size());
             // convert arr bit plane to byte region
             String[][] tempReg = new String[8][8];
             for(int x=0; x<8; x++){
@@ -159,7 +160,7 @@ public class BPCS {
         for(int i = 0;i<8;i++){
             ArrayList<String> tempInput= new ArrayList<>();
             for (int j = 0;j<8;j++){
-                tempInput.add("00000000000000000000000000000000");
+                tempInput.add("00000000");
             }
             region.add(tempInput);
             System.out.println(tempInput.size());
@@ -167,9 +168,9 @@ public class BPCS {
     }
     
     public void initArrRegion(){
-        ArrayList<ArrayList<String>> tempInput= new ArrayList<ArrayList<String>>();
+        region = new ArrayList<>();
         initRegion();
-        for(int i = 0;i<Math.ceil((float)imageWidth/8);i++){
+        for(int i = 0;i<Math.ceil((float)(imageWidth*3)/8);i++){
             arrRegion.add(region);
         }
     }
