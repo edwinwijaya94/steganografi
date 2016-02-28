@@ -6,6 +6,7 @@
 package stegano;
 
 import java.util.ArrayList;
+import javafx.util.Pair;
 
 /**
  *
@@ -13,79 +14,60 @@ import java.util.ArrayList;
  */
 public class BPCS {
     //attr
-    ArrayList<ArrayList<Byte>> byteImage;
     float threshold;
-    ArrayList<ArrayList<ArrayList<Byte>>> regions; // 8x8 pixel region
     ArrayList<ArrayList<Byte>> stegoImage;
-    
+    ArrayList<ArrayList<ArrayList<String>>> imageMtxBitPlane; // image bit planes from all regions
+    ArrayList<Pair<Integer,Integer>> imageTargetBitPlane; // target bit plane
+    static ArrayList<ArrayList<String>> messageRegions; // message in region format
     public BPCS(){
     
     }
     
-    private void setThreshold(float threshold){
+    public void setThreshold(float threshold){
         this.threshold = threshold;
     }
     
-    private void setByteImage(ArrayList<ArrayList<Byte>> byteImage){
-        this.byteImage = byteImage;
-    }
-    
-    private float getThreshold(){
+    public float getThreshold(){
         return this.threshold;
     }
     
-    private ArrayList<ArrayList<Byte>> getByteImage(ArrayList<ArrayList<Byte>> byteImage){
-        return this.byteImage;
+    public void setImageMtxBitPlane(ArrayList<ArrayList<ArrayList<String>>> imageMtxBitPlane){
+        this.imageMtxBitPlane = imageMtxBitPlane;
     }
     
-    //add pixels if image size not multiple of 8x8 pixels
-    private void addPixels(){
-        
-    }
-        
-    
-    //set image regions, size 8x8 pixels
-    private void setRegions(){
-        
+    public ArrayList<ArrayList<ArrayList<String>>> getImageMtxBitPlane(){
+        return this.imageMtxBitPlane;
     }
     
-    //get region complexity
-    private float getComplexity(ArrayList<ArrayList<Byte>> region){
-                
-        return 0;
+    public void setImageTargetBitPlane(ArrayList<Pair<Integer,Integer>> imageTargetBitPlane){
+        this.imageTargetBitPlane = imageTargetBitPlane;
     }
     
-    //get region index that pass threshold value
-    private ArrayList<Integer> getTargetRegionsIndex(){
-        
-        return null;
-    }
-    
-    //conjugate region to increase complexity
-    private void conjugateRegion(ArrayList<ArrayList<Byte>> region){
-        
-    }
-   
-    
-    private void toCGC(){
-        
-    }
-    
-    private void toPBC(){
-        
+    public ArrayList<Pair<Integer,Integer>> getImageTargetBitPlane(){
+        return this.imageTargetBitPlane;
     }
     
     // insert message to byteImage then put to stegoImage
-    private void doStegano(){
-        
+    public int doStegano(){
+        if(messageRegions.size() > imageTargetBitPlane.size()){
+            return 0; // over payload
+        }
+        else{
+            for(int i=0; i<messageRegions.size(); i++){
+                int a = imageTargetBitPlane.get(i).getKey(); // get region idx
+                int b = imageTargetBitPlane.get(i).getValue(); // get region's bit plane idx
+                imageMtxBitPlane.get(a).set(b, messageRegions.get(i)); // replace bit plane with message region
+            }
+        }
+        return 1; // OK
     }
     
-    private ArrayList<ArrayList<Byte>> getStegoImage(){
+    public ArrayList<ArrayList<Byte>> getStegoImage(){
         return this.stegoImage;
     }
             
     // count PSNR val
-    private float getPSNR(){
+    public float getPSNR(){
         
         return 0;
     }
