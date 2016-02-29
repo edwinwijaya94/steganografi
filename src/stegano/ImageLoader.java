@@ -14,7 +14,10 @@ import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import javafx.util.Pair;
 import javax.imageio.ImageIO;
@@ -75,9 +78,12 @@ public class ImageLoader {
     public void toByteImage() throws IOException{
         ArrayList<Byte> tempByte = null;
         ArrayList<String> tempBinary = null;
+        
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(image, "bmp", baos);
+        baos.flush();
         byte[] bytes = baos.toByteArray();
+        baos.close();
         imageBytes = new byte[bytes.length];
         imageBytes = bytes;
         //System.out.println(imageBytes.length);
@@ -193,13 +199,29 @@ public class ImageLoader {
         }
     }
     
-    public BufferedImage createImageFromBytes(byte[] imageData) throws IOException {
-
-        BufferedImage newImg = null;
-        newImg = new BufferedImage(height,width,BufferedImage.TYPE_3BYTE_BGR);
-        newImg.setData(Raster.createRaster(newImg.getSampleModel(), new DataBufferByte(imageData,imageData.length), new Point()));
-        ImageIO.write(newImg, "bmp",new File("newPict.bmp"));
+    public BufferedImage createImageFromBytes(byte[] imageData) throws IOException {        
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream("newPict2.bmp");
+            out.write(imageData);
+            out.flush();
+            System.out.println("inputfile");
+        } finally {
+            if (out != null) out.close();
+        }
+        
+        BufferedImage newImg = new BufferedImage(width,height,BufferedImage.TYPE_3BYTE_BGR);
+        
+        try{
+            newImg = ImageIO.read(new File("newPict2.bmp"));
+        }
+        catch (IOException e) { }
+        
         return newImg;
+//        InputStream in = new ByteArrayInputStream(imageData);
+//        BufferedImage bImageFromConvert = ImageIO.read(in);
+//        
+//        return bImageFromConvert;
     }
     
     public void countComplexity(){

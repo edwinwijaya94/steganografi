@@ -433,6 +433,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         }
         IL.setImage(myPicture);
         System.out.println("AAA");
+        
         try {
             IL.toByteImage();
         } catch (IOException ex) {
@@ -458,7 +459,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         System.out.println("CGC");
         //IL.toCGC();
 //        System.out.println("bitplane IL " + IL.mtxBitPlane.size());
-        bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width);
+//        bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width);
         
         //get message
          ArrayList<String> al = new ArrayList<String>();
@@ -479,7 +480,7 @@ public class SteganoGUI extends javax.swing.JFrame {
 //        IL.printMTXBitPlane();
         
 //        IL.printComplexity();
-        IL.setImageBytes(bpcs.getStegoByteArray());
+        IL.setImageBytes(IL.getImageBytes());
         try {
             pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
         } catch (IOException ex) {
