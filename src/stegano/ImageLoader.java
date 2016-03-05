@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.util.Pair;
 import javax.imageio.ImageIO;
 
@@ -40,6 +41,7 @@ public class ImageLoader {
     ArrayList<Pair<Integer,Integer>> targetBitPlane;
     public int width;
     public int height;
+    public byte[] header;
     public byte[] imageBytes;
     
     
@@ -85,8 +87,9 @@ public class ImageLoader {
         baos.flush();
         byte[] bytes = baos.toByteArray();
         baos.close();
-        imageBytes = new byte[bytes.length];
-        imageBytes = bytes;
+       header = Arrays.copyOfRange(bytes,0,54);
+        
+        imageBytes = Arrays.copyOfRange(bytes,54,bytes.length);
 //        for(int i=0; i<100; i++){
 //            System.out.println("ori "+imageBytes[i]);
 //        }
@@ -146,18 +149,18 @@ public class ImageLoader {
             System.out.println();
         }
 //        System.out.println("count " + count);
-//        System.out.println("binary image");
-//        for(int i=0; i<8; i++){
-//            for(int j=0; j<8; j++)
-//                System.out.print(binaryImage.get(i).get(j) + " ");
-//            System.out.println();
-//        }
-//        System.out.println("region 1");
-//        for(int i=0; i<8; i++){
-//            for(int j=0; j<8; j++)
-//                System.out.print(imageRegions.get(0).get(0).get(i).get(j) + " ");
-//            System.out.println();
-//        }
+        System.out.println("binary image");
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++)
+                System.out.print(binaryImage.get(i).get(j) + " ");
+            System.out.println();
+        }
+        System.out.println("region 1");
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++)
+                System.out.print(imageRegions.get(0).get(1).get(0).get(j) + " ");
+            System.out.println();
+        }
         
         //System.out.println("region size" +imageRegions.get(1).size() +" " +imageRegions.size());
     }
@@ -226,10 +229,23 @@ public class ImageLoader {
             for (int j = 0;j<imageRegions.get(i).size();j++){
                 makeArrBitPlane(imageRegions.get(i).get(j));
                 //System.out.println("img reg i j size"+ imageRegions.get(i).get(j).size());
+                if(i==0 && j==1){
+                    System.out.println("arrbitplane");
+                    System.out.println(arrBitPlane);
+                }
                 mtxBitPlane.add(arrBitPlane);
                 mtxBitPlaneCGC.add(arrBitPlane);
             }
         }
+    }
+    
+    public byte[] concatByte(byte[] a, byte[] b) {
+        int aLen = a.length;
+        int bLen = b.length;
+        byte[] c= new byte[aLen+bLen];
+        System.arraycopy(a, 0, c, 0, aLen);
+        System.arraycopy(b, 0, c, aLen, bLen);
+        return c;
     }
     
     public BufferedImage createImageFromBytes(byte[] imageData) throws IOException {
@@ -243,7 +259,10 @@ public class ImageLoader {
 //            ImageIO.write(stegoImg, "bmp", new File("newPict2.bmp"));
             
             out = new FileOutputStream("newPict2.bmp");
-            out.write(imageData);
+            header[18] = (byte)(width/3); //resize width
+            header[22] = (byte)(height); // resize height
+            byte[] OutImage = concatByte(header, imageData);
+            out.write(OutImage);
             out.flush();
             System.out.println("inputfile");
         } finally {
