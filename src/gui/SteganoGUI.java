@@ -457,10 +457,8 @@ public class SteganoGUI extends javax.swing.JFrame {
 //        IL.printMTXBitPlane();
         System.out.println("after");
         System.out.println("CGC");
-        //IL.toCGC();
-//        System.out.println("bitplane IL " + IL.mtxBitPlane.size());
-//        bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width);
         
+        bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width);
         //get message
          ArrayList<String> al = new ArrayList<String>();
 	// The string we want to convert.
@@ -473,16 +471,9 @@ public class SteganoGUI extends javax.swing.JFrame {
         bpcs.messageRegions = ML.regions;
         bpcs.doStegano();
         bpcs.toStegoByteArray();
-  
-//        IL.printMTXBitPlaneCGC();
-        System.out.println("PBC");
-        //IL.toPBC();
-//        IL.printMTXBitPlane();
         
-//        IL.printComplexity();
         IL.setImageBytes(bpcs.getStegoByteArray());
-//        IL.setImageBytes(IL.imageBytes);
-        IL.setImageBytes(IL.getImageBytes());
+
         try {
             pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
         } catch (IOException ex) {
