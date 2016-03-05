@@ -237,14 +237,14 @@ public class ImageLoader {
         FileOutputStream out = null;
         System.out.println("image data size "+ imageData.length);
         try {
-            InputStream in = new ByteArrayInputStream(imageData);
-            BufferedImage stegoImg = new BufferedImage(width/3, height, BufferedImage.TYPE_3BYTE_BGR);
-            stegoImg = ImageIO.read(in);
-            ImageIO.write(stegoImg, "bmp", new File("newPict2.bmp"));
+//            InputStream in = new ByteArrayInputStream(imageData);
+//            BufferedImage stegoImg = new BufferedImage(width/3, height, BufferedImage.TYPE_3BYTE_BGR);
+//            stegoImg = ImageIO.read(in);
+//            ImageIO.write(stegoImg, "bmp", new File("newPict2.bmp"));
             
-//            out = new FileOutputStream("newPict2.bmp");
-//            out.write(imageData);
-//            out.flush();
+            out = new FileOutputStream("newPict2.bmp");
+            out.write(imageData);
+            out.flush();
             System.out.println("inputfile");
         } finally {
             if (out != null) out.close();
