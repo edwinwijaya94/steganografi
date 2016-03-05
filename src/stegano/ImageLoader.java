@@ -79,9 +79,12 @@ public class ImageLoader {
     public void toByteImage() throws IOException{
         ArrayList<Byte> tempByte = null;
         ArrayList<String> tempBinary = null;
+        
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(image, "bmp", baos);
+        baos.flush();
         byte[] bytes = baos.toByteArray();
+        baos.close();
         imageBytes = new byte[bytes.length];
         imageBytes = bytes;
 //        for(int i=0; i<100; i++){
