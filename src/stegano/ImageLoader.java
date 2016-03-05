@@ -178,7 +178,7 @@ public class ImageLoader {
         region = new ArrayList<>();
         ArrayList<String> input= new ArrayList<>();
         for (int j = 0;j<8;j++){
-            input.add("00000000");
+            input.add("11111111");
         }
         
         for(int i = 0;i<8;i++){
@@ -233,6 +233,17 @@ public class ImageLoader {
                     System.out.println("arrbitplane");
                     System.out.println(arrBitPlane);
                 }
+                mtxBitPlane.add(arrBitPlane);
+                mtxBitPlaneCGC.add(arrBitPlane);
+            }
+        }
+    }
+    
+    public void test(ArrayList<ArrayList<ArrayList<ArrayList<String>>>> a){
+        for (int i = 0;i<a.size();i++){
+            for (int j = 0;j<a.get(i).size();j++){
+                makeArrBitPlane(a.get(i).get(j));
+                //System.out.println("img reg i j size"+ imageRegions.get(i).get(j).size());
                 mtxBitPlane.add(arrBitPlane);
                 mtxBitPlaneCGC.add(arrBitPlane);
             }
