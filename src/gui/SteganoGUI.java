@@ -465,12 +465,12 @@ public class SteganoGUI extends javax.swing.JFrame {
 	// The string we want to convert.
 	String letters = "Vincent Theophilus Ciputra";
         
-//        al = ML.toByteMessage(letters);
-//        ML.toRegions(al);
-//        ML.conjugateRegion();
-//        
-//        bpcs.messageRegions = ML.regions;
-//        bpcs.doStegano();
+        al = ML.toByteMessage(letters);
+        ML.toRegions(al);
+        ML.conjugateRegion();
+        
+        bpcs.messageRegions = ML.regions;
+        bpcs.doStegano();
         bpcs.toStegoByteArray();
   
 //        IL.printMTXBitPlaneCGC();
@@ -480,6 +480,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         
 //        IL.printComplexity();
         IL.setImageBytes(bpcs.getStegoByteArray());
+//        IL.setImageBytes(IL.imageBytes);
         try {
             pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
         } catch (IOException ex) {

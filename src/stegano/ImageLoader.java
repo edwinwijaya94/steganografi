@@ -14,7 +14,9 @@ import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import javafx.util.Pair;
 import javax.imageio.ImageIO;
@@ -38,7 +40,7 @@ public class ImageLoader {
     ArrayList<Pair<Integer,Integer>> targetBitPlane;
     public int width;
     public int height;
-    byte[] imageBytes;
+    public byte[] imageBytes;
     
     
     public ImageLoader(){
@@ -57,9 +59,11 @@ public class ImageLoader {
     public void setImage(BufferedImage image){
         this.image = image;
         this.width = image.getWidth();
+        this.width = (int) (72 *Math.ceil((float)(this.width)/24)); //resize image width for RGB image
         this.height = image.getHeight();
-        System.out.println("width" + width);
-        System.out.println("height" + height);
+        this.height = (int) (8 *Math.ceil((float)(this.height)/8)); //resize image height
+        System.out.println("new width" + width);
+        System.out.println("new height" + height);
     }
     
     public void setImageBytes(byte[] imgBytes){
@@ -80,18 +84,21 @@ public class ImageLoader {
         byte[] bytes = baos.toByteArray();
         imageBytes = new byte[bytes.length];
         imageBytes = bytes;
-        //System.out.println(imageBytes.length);
+//        for(int i=0; i<100; i++){
+//            System.out.println("ori "+imageBytes[i]);
+//        }
+        System.out.println("ori bytes length "+imageBytes.length);
         
         int count = 0;
         int countBin = 0;
-        for (int i = 0;i<height;i++){
+        for (int i = 0;i<image.getHeight();i++){
             tempByte = new ArrayList<>();
             tempBinary = new ArrayList<>();
-            for (int j = 0;j<width*3;j++){
+            for (int j = 0;j<image.getWidth()*3;j++){
                 tempByte.add(imageBytes[count]);
                 count++;
             }
-            for (int j = 0;j<width;j++){
+            for (int j = 0;j<image.getWidth();j++){
 //                if(j%4 == 0){
 //                    String s= "11111111"; // alpha
 //                    tempBinary.add(s);
@@ -104,28 +111,52 @@ public class ImageLoader {
             
             byteImage.add(tempByte);
         }
-//        this.width = binaryImage.get(0).size();
-//        this.height = binaryImage.size();
+        
     }
     
     public void toRegions(){
-        ArrayList<ArrayList<ArrayList<String>>> tempArrRegion = new ArrayList<>();
-        System.out.println("bin img size "+binaryImage.size());
+        ArrayList<ArrayList<ArrayList<String>>> tempArrRegion;
+        System.out.println("bin img size "+binaryImage.size() + " " + binaryImage.get(0).size());
+        int count=0;
+        System.out.println("binary image before");
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++)
+                System.out.print(binaryImage.get(i).get(j) + " ");
+            System.out.println();
+        }
         for (int i = 0;i<binaryImage.size();i++){
+            initArrRegion();
             if (i%8==0){
-                initArrRegion();
-                System.out.println("arrRegSizeBefore" + arrRegion.size());
-                
-                imageRegions.add(arrRegion);
-                arrRegion = new ArrayList<>();
+//                System.out.println("arrRegSizeBefore" + arrRegion.size());
+                tempArrRegion = new ArrayList<>((ArrayList<ArrayList<ArrayList<String>>>) arrRegion.clone());
+//                tempArrRegion = ;
+                imageRegions.add(tempArrRegion);
                 //System.out.println("arrRegSizeAfter" + arrRegion.size());
             }
             
             for(int j=0;j<binaryImage.get(i).size();j++){
+
+//                System.out.println("img reg size, i size :"+ imageRegions.size()+" "+imageRegions.get(0).size());
+//                System.out.println("i/8 j/8 i%8 j%8 : "+i/8+" "+j/8+" "+i%8+" "+j%8);
                 imageRegions.get(i/8).get(j/8).get(i%8).set(j%8,binaryImage.get(i).get(j));
             }
+            System.out.println();
         }
-        System.out.println("region size" +imageRegions.get(1).size() +" " +imageRegions.size());
+//        System.out.println("count " + count);
+//        System.out.println("binary image");
+//        for(int i=0; i<8; i++){
+//            for(int j=0; j<8; j++)
+//                System.out.print(binaryImage.get(i).get(j) + " ");
+//            System.out.println();
+//        }
+//        System.out.println("region 1");
+//        for(int i=0; i<8; i++){
+//            for(int j=0; j<8; j++)
+//                System.out.print(imageRegions.get(0).get(0).get(i).get(j) + " ");
+//            System.out.println();
+//        }
+        
+        //System.out.println("region size" +imageRegions.get(1).size() +" " +imageRegions.size());
     }
     
     public void printRegion(ArrayList<ArrayList<String>> inputArr){
@@ -138,12 +169,15 @@ public class ImageLoader {
     }
    
     public void initRegion(){
+        region = new ArrayList<>();
+        ArrayList<String> input= new ArrayList<>();
+        for (int j = 0;j<8;j++){
+            input.add("00000000");
+        }
         
         for(int i = 0;i<8;i++){
-            ArrayList<String> tempInput= new ArrayList<>();
-            for (int j = 0;j<8;j++){
-                tempInput.add("00000000");
-            }
+            
+            ArrayList<String> tempInput = new ArrayList<>((ArrayList<String>)input.clone());
             region.add(tempInput);
 //            System.out.println(tempInput.size());
         }
@@ -153,14 +187,16 @@ public class ImageLoader {
     }
     
     public void initArrRegion(){
-        region = new ArrayList<>();
-        initRegion();
+        arrRegion = new ArrayList<>();
         
-        for(int i = 0;i<Math.ceil((float)(width*3)/8);i++){
-            arrRegion.add(region);
+        
+        for(int i = 0;i<width/8;i++){
+            initRegion();
+            ArrayList<ArrayList<String>>tempReg;
+            tempReg = new ArrayList<>();
+            tempReg = (ArrayList<ArrayList<String>>) region.clone();
+            arrRegion.add(tempReg);
         }
-        
-        //System.out.println("arrreg i"+arrRegion.get(1).size());
     }
     
     public void makeBitPlane(ArrayList<ArrayList<String>> reg,int bitPlaneIdx){
@@ -195,11 +231,31 @@ public class ImageLoader {
     
     public BufferedImage createImageFromBytes(byte[] imageData) throws IOException {
 
-        BufferedImage newImg = null;
-        newImg = new BufferedImage(height,width,BufferedImage.TYPE_3BYTE_BGR);
-        newImg.setData(Raster.createRaster(newImg.getSampleModel(), new DataBufferByte(imageData,imageData.length), new Point()));
-        ImageIO.write(newImg, "bmp",new File("newPict.bmp"));
+        FileOutputStream out = null;
+        System.out.println("image data size "+ imageData.length);
+        try {
+            InputStream in = new ByteArrayInputStream(imageData);
+            BufferedImage stegoImg = new BufferedImage(width/3, height, BufferedImage.TYPE_3BYTE_BGR);
+            stegoImg = ImageIO.read(in);
+            ImageIO.write(stegoImg, "bmp", new File("newPict2.bmp"));
+            
+//            out = new FileOutputStream("newPict2.bmp");
+//            out.write(imageData);
+//            out.flush();
+            System.out.println("inputfile");
+        } finally {
+            if (out != null) out.close();
+        }
+        System.out.println("new width height " + width/3 +" " + height);
+        BufferedImage newImg = new BufferedImage(width/3, height, BufferedImage.TYPE_3BYTE_BGR);
+        
+        try{
+            newImg = ImageIO.read(new File("newPict2.bmp"));
+        }
+        catch (IOException e) { }
+        
         return newImg;
+        
     }
     
     public void countComplexity(){

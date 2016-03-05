@@ -81,21 +81,23 @@ public class BPCS {
     
     public void toStegoByteArray(){
         System.out.println("bitplane " +imageMtxBitPlane.size());
+        initRegion();
         for(int i=0; i<imageMtxBitPlane.size(); i++){
             
-            if(i%(Math.ceil((float)(imageWidth*3)/8)) == 0){ // allocate new image row
-                initArrRegion();
-                stegoRegions.addAll(arrRegion);
-                arrRegion = new ArrayList<>();
-            }
-            System.out.println("stego regions " +stegoRegions.size());
+            stegoRegions.add(region);
+//            if(i%(Math.ceil((float)(imageWidth*3)/8)) == 0){ // allocate new image row
+//                initArrRegion();
+//                stegoRegions.addAll(arrRegion);
+//                arrRegion = new ArrayList<>();
+//            }
+            //System.out.println("stego regions " +stegoRegions.size());
             // convert arr bit plane to byte region
             String[][] tempReg = new String[8][8];
             for(int x=0; x<8; x++){
                 for(int y=0; y<8; y++)
                     tempReg[x][y]="";
             }
-//            System.out.println("img bit i" +imageMtxBitPlane.get(i).size());
+            //System.out.println("img bit i" +imageMtxBitPlane.get(i).size());
             for(int j=0; j<imageMtxBitPlane.get(i).size(); j++){
                 ArrayList<String>curBitPlane = imageMtxBitPlane.get(i).get(j); // current bit plane
                 //System.out.println(curBitPlane.get(0));
@@ -120,22 +122,25 @@ public class BPCS {
             
             for(int k=0; k<8; k++){
                 for(int l=0; l<8; l++){
-                    //System.out.println("temp reg "+tempReg[k][l].length());
+                  //System.out.println("temp reg "+tempReg[k][l].length());
                   Reg.get(k).set(l,tempReg[k][l]);
                 }
             }
+            //System.out.println("reg size "+ Reg.size() +" "+Reg.get(0).size());
             stegoRegions.set(i, Reg);
+//            System.out.println("stegoRegions");
+//            System.out.println(stegoRegions);
         }
         
         // convert regions to byte array
         ArrayList<Byte> tempByteArray= new ArrayList<>();
-        System.out.println("stego regions " +stegoRegions.size());
-        for(int i=0; i<stegoRegions.size(); i++){
+        //System.out.println("stego regions " +stegoRegions.size());
+        for(int i=0; i<8; i++){
             //get from a region
-            for(int j=0; j<8; j++){
+            for(int j=0; j<stegoRegions.size(); j++){
                 for(int k=0; k<8; k++){
                     //System.out.println("stegoreg" + stegoRegions.get(i).get(j).get(k));
-                    tempByteArray.add((byte)Integer.parseInt(stegoRegions.get(i).get(j).get(k),2)); //binary string to byte
+                    tempByteArray.add((byte)Integer.parseInt(stegoRegions.get(j).get(i).get(k),2)); //binary string to byte
                 }
             }
         }
@@ -144,7 +149,15 @@ public class BPCS {
         for (int i = 0; i < tempByteArray.size(); i++) {
             stegoByteArray[i] = tempByteArray.get(i);
         }
+//        for(int i=0; i<100; i++){
+//            System.out.println("stego "+stegoByteArray[i]);
+//        }
         
+//        for(int i = 0;i<stegoByteArray.length;i++){
+//            if(stegoByteArray[i] < 0){
+//                stegoByteArray[i]+= 256;    
+//            }
+//        }
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println(stegoByteArray.length);
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
