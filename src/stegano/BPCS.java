@@ -21,6 +21,9 @@ public class BPCS {
     ArrayList<Pair<Integer,Integer>> imageTargetBitPlane; // target bit plane
     public ArrayList<ArrayList<String>> messageRegions; // message in region format
     int imageWidth;
+    int imageHeight;
+    int countRegHor;
+    int countRegVer;
     
     // temp
     ArrayList<ArrayList<String>> region;
@@ -47,9 +50,12 @@ public class BPCS {
         return this.threshold;
     }
     
-    public void setImageMtxBitPlane(ArrayList<ArrayList<ArrayList<String>>> imageMtxBitPlane, int imageWidth){
+    public void setImageMtxBitPlane(ArrayList<ArrayList<ArrayList<String>>> imageMtxBitPlane, int imageWidth, int imageHeight){
         this.imageMtxBitPlane = imageMtxBitPlane;
         this.imageWidth = imageWidth;
+        this.countRegHor = imageWidth/8;
+        this.imageHeight = imageHeight;
+        this.countRegVer = imageHeight/8;
     }
     
     public ArrayList<ArrayList<ArrayList<String>>> getImageMtxBitPlane(){
@@ -140,12 +146,16 @@ public class BPCS {
         // convert regions to byte array
         ArrayList<Byte> tempByteArray= new ArrayList<>();
         //System.out.println("stego regions " +stegoRegions.size());
-        for(int i=0; i<8; i++){
-            //get from a region
-            for(int j=0; j<stegoRegions.size(); j++){
-                for(int k=0; k<8; k++){
-                    //System.out.println("stegoreg" + stegoRegions.get(i).get(j).get(k));
-                    tempByteArray.add((byte)Integer.parseInt(stegoRegions.get(j).get(i).get(k),2)); //binary string to byte
+        int regIdx = 0;
+        for(int a=0; a<countRegVer; a++){
+            regIdx = a*countRegHor;
+            for(int i=0; i<8; i++){
+                //get from a region
+                for(int j=regIdx; j<regIdx+countRegHor; j++){
+                    for(int k=0; k<8; k++){
+                        //System.out.println("stegoreg" + stegoRegions.get(i).get(j).get(k));
+                        tempByteArray.add((byte)Integer.parseInt(stegoRegions.get(j).get(i).get(k),2)); //binary string to byte
+                    }
                 }
             }
         }

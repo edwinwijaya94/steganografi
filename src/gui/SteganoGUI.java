@@ -458,18 +458,18 @@ public class SteganoGUI extends javax.swing.JFrame {
         System.out.println("after");
         System.out.println("CGC");
         
-        bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width);
+        bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width, IL.height);
         //get message
          ArrayList<String> al = new ArrayList<String>();
 	// The string we want to convert.
-//	String letters = "Vincent Theophilus Ciputra";
-//        
-//        al = ML.toByteMessage(letters);
-//        ML.toRegions(al);
-//        ML.conjugateRegion();
-//        
-//        bpcs.messageRegions = ML.regions;
-//        bpcs.doStegano();
+	String letters = "Vincent Theophilus Ciputra";
+        
+        al = ML.toByteMessage(letters);
+        ML.toRegions(al);
+        ML.conjugateRegion();
+        
+        bpcs.messageRegions = ML.regions;
+        bpcs.doStegano();
         bpcs.toStegoByteArray();
         IL.setImageBytes(bpcs.getStegoByteArray());
 //        IL.setImageBytes(IL.imageBytes);
