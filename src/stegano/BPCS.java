@@ -130,10 +130,10 @@ public class BPCS {
             //System.out.println("reg size "+ Reg.size() +" "+Reg.get(0).size());
             stegoRegions.set(i, Reg);
 //            if(i==1){
-                System.out.println("mtx bit plane 0");
-                System.out.println(imageMtxBitPlane.get(i));
-                System.out.println("stego regions");
-                System.out.println(stegoRegions.get(i));
+//                System.out.println("mtx bit plane 0");
+//                System.out.println(imageMtxBitPlane.get(i));
+//                System.out.println("stego regions");
+//                System.out.println(stegoRegions.get(i));
 //            }   
         }
         System.out.println("stegoreg size " + stegoRegions.size());

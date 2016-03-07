@@ -94,7 +94,8 @@ public class ImageLoader {
 //            System.out.println("ori "+imageBytes[i]);
 //        }
         System.out.println("ori bytes length "+imageBytes.length);
-        
+        System.out.println("img bytes");
+        System.out.println(Arrays.copyOfRange(imageBytes, 0, 100));
         int count = 0;
         int countBin = 0;
         for (int i = 0;i<image.getHeight();i++){
@@ -104,7 +105,7 @@ public class ImageLoader {
                 tempByte.add(imageBytes[count]);
                 count++;
             }
-            for (int j = 0;j<image.getWidth();j++){
+            for (int j = 0;j<image.getWidth()*3;j++){
 //                if(j%4 == 0){
 //                    String s= "11111111"; // alpha
 //                    tempBinary.add(s);
@@ -124,12 +125,12 @@ public class ImageLoader {
         ArrayList<ArrayList<ArrayList<String>>> tempArrRegion;
         System.out.println("bin img size "+binaryImage.size() + " " + binaryImage.get(0).size());
         int count=0;
-        System.out.println("binary image before");
-        for(int i=0; i<8; i++){
-            for(int j=0; j<8; j++)
-                System.out.print(binaryImage.get(i).get(j) + " ");
-            System.out.println();
-        }
+//        System.out.println("binary image before");
+//        for(int i=0; i<8; i++){
+//            for(int j=0; j<8; j++)
+//                System.out.print(binaryImage.get(i).get(j) + " ");
+//            System.out.println();
+//        }
         for (int i = 0;i<binaryImage.size();i++){
             initArrRegion();
             if (i%8==0){
@@ -146,7 +147,6 @@ public class ImageLoader {
 //                System.out.println("i/8 j/8 i%8 j%8 : "+i/8+" "+j/8+" "+i%8+" "+j%8);
                 imageRegions.get(i/8).get(j/8).get(i%8).set(j%8,binaryImage.get(i).get(j));
             }
-            System.out.println();
         }
 //        System.out.println("count " + count);
         System.out.println("binary image");
@@ -155,10 +155,10 @@ public class ImageLoader {
                 System.out.print(binaryImage.get(i).get(j) + " ");
             System.out.println();
         }
-        System.out.println("region 1");
+        System.out.println("region");
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++)
-                System.out.print(imageRegions.get(0).get(1).get(0).get(j) + " ");
+                System.out.print(imageRegions.get(0).get(1).get(i).get(j) + " ");
             System.out.println();
         }
         
@@ -178,7 +178,7 @@ public class ImageLoader {
         region = new ArrayList<>();
         ArrayList<String> input= new ArrayList<>();
         for (int j = 0;j<8;j++){
-            input.add("11111111");
+            input.add("00000000");
         }
         
         for(int i = 0;i<8;i++){
@@ -272,6 +272,8 @@ public class ImageLoader {
             out = new FileOutputStream("newPict2.bmp");
             header[18] = (byte)(width/3); //resize width
             header[22] = (byte)(height); // resize height
+            System.out.println("image data");
+            System.out.println(Arrays.copyOfRange(imageData, 0, 100));
             byte[] OutImage = concatByte(header, imageData);
             out.write(OutImage);
             out.flush();
@@ -279,7 +281,7 @@ public class ImageLoader {
         } finally {
             if (out != null) out.close();
         }
-        System.out.println("new width height " + width/3 +" " + height);
+//        System.out.println("new width height " + width/3 +" " + height);
         BufferedImage newImg = new BufferedImage(width/3, height, BufferedImage.TYPE_3BYTE_BGR);
         
         try{
