@@ -21,7 +21,8 @@ public class MessageLoader {
     ArrayList<String> wcPattern;
     ArrayList<Integer> conjugationMap;
     public ArrayList<ArrayList<String>> regions; // 8x8 pixel region
-    
+    public static double threshold;
+            
     public MessageLoader(){
         byteMessage = new ArrayList<String>();
         regions = new ArrayList<ArrayList<String>>();
@@ -141,10 +142,10 @@ public class MessageLoader {
         return k;
     }
     
-    public static boolean isNoiseLikeRegion(ArrayList<String> byteMessage){
+    public static boolean isNoiseLikeRegion(ArrayList<String> byteMessage, double threshold){
         double n = 112;
         double alpha;
-        double threshold = 0.3;
+//        double threshold = 0.3;
         alpha = (double)complexity(byteMessage)/n;
 //        System.out.println("alpha");
 //        System.out.println(alpha);
@@ -170,7 +171,7 @@ public class MessageLoader {
     
     public void conjugateRegion(){
         for(int i=0;i<regions.size();i++){
-            if(!isNoiseLikeRegion(regions.get(i))){
+            if(!isNoiseLikeRegion(regions.get(i),threshold)){
                 conjugationMap.add(i);
                 for(int j=0;j<8;j++){
                     regions.get(i).set(j, xor(regions.get(i).get(j),wcPattern.get(j)));
@@ -200,36 +201,36 @@ public class MessageLoader {
     
     public void main(String[] args) {
 
-        MessageLoader m = new MessageLoader();
-        ArrayList<String> al = new ArrayList<String>();
-	// The string we want to convert.
-	String letters = "Vincent Theophilus Ciputra";
-	System.out.println(letters);
-        
-        al = m.toByteMessage(letters);
-        System.out.println(al);
-        m.toRegions(al);
-        for(int i=0;i<regions.size();i++){
-            System.out.println(m.complexity(regions.get(i)));
-            System.out.println(m.isNoiseLikeRegion(regions.get(i)));
-        }
-        printMessage(regions);
-        System.out.println();
-        System.out.println("Conjugate Region:");
-        m.conjugateRegion();
-        for(int i=0;i<regions.size();i++){
-            System.out.println(m.complexity(regions.get(i)));
-            System.out.println(m.isNoiseLikeRegion(regions.get(i)));
-        }
-        printMessage(regions);
-        System.out.println();
-        m.reverseConjugateRegion();
-        System.out.println();
-        System.out.println("Reverse Conjugate Region:");
-        for(int i=0;i<regions.size();i++){
-            System.out.println(m.complexity(regions.get(i)));
-            System.out.println(m.isNoiseLikeRegion(regions.get(i)));
-        }
-        printMessage(regions);
+//        MessageLoader m = new MessageLoader();
+//        ArrayList<String> al = new ArrayList<String>();
+//	// The string we want to convert.
+//	String letters = "Vincent Theophilus Ciputra";
+//	System.out.println(letters);
+//        
+//        al = m.toByteMessage(letters);
+//        System.out.println(al);
+//        m.toRegions(al);
+//        for(int i=0;i<regions.size();i++){
+//            System.out.println(m.complexity(regions.get(i)));
+//            System.out.println(m.isNoiseLikeRegion(regions.get(i)));
+//        }
+//        printMessage(regions);
+//        System.out.println();
+//        System.out.println("Conjugate Region:");
+//        m.conjugateRegion();
+//        for(int i=0;i<regions.size();i++){
+//            System.out.println(m.complexity(regions.get(i)));
+//            System.out.println(m.isNoiseLikeRegion(regions.get(i)));
+//        }
+//        printMessage(regions);
+//        System.out.println();
+//        m.reverseConjugateRegion();
+//        System.out.println();
+//        System.out.println("Reverse Conjugate Region:");
+//        for(int i=0;i<regions.size();i++){
+//            System.out.println(m.complexity(regions.get(i)));
+//            System.out.println(m.isNoiseLikeRegion(regions.get(i)));
+//        }
+//        printMessage(regions);
     }
 }

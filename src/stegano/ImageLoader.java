@@ -296,7 +296,7 @@ public class ImageLoader {
     public void countComplexity(){
         for(int i = 0;i<mtxBitPlane.size();i++){
             for (int j = 0;j<mtxBitPlane.get(i).size();j++){
-                if (MessageLoader.isNoiseLikeRegion(mtxBitPlane.get(i).get(j))){
+                if (MessageLoader.isNoiseLikeRegion(mtxBitPlane.get(i).get(j),MessageLoader.threshold)){
 //                    System.out.println("masuk");
                     targetBitPlane.add(new Pair(i,j));
                 }

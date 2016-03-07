@@ -60,7 +60,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         fileChooser = new javax.swing.JFileChooser();
         executeButton = new javax.swing.JButton();
         inputKey = new javax.swing.JTextField();
-        keyLabel = new javax.swing.JLabel();
+        cryptoKeyLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         inputMessage = new javax.swing.JTextArea();
         openMessageButton = new javax.swing.JButton();
@@ -85,6 +85,8 @@ public class SteganoGUI extends javax.swing.JFrame {
         saveButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         PSNRVal = new javax.swing.JLabel();
+        stegoKeyLabel = new javax.swing.JLabel();
+        inputKey1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("BPCS Stegano");
@@ -100,11 +102,12 @@ public class SteganoGUI extends javax.swing.JFrame {
 
         inputKey.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        keyLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        keyLabel.setText("Key");
+        cryptoKeyLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cryptoKeyLabel.setText("Crypto Key");
 
         inputMessage.setColumns(20);
         inputMessage.setRows(5);
+        inputMessage.setText("Default Message");
         jScrollPane1.setViewportView(inputMessage);
 
         openMessageButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -202,6 +205,8 @@ public class SteganoGUI extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Threshold");
 
+        inputThreshold.setText("0.3");
+
         inputImageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         outputImageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -225,6 +230,11 @@ public class SteganoGUI extends javax.swing.JFrame {
         PSNRVal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         PSNRVal.setText("0");
 
+        stegoKeyLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        stegoKeyLabel.setText("Stego Key");
+
+        inputKey1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -239,43 +249,49 @@ public class SteganoGUI extends javax.swing.JFrame {
                                 .addComponent(keyLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(openImageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                        .addGap(77, 77, 77)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(keyLabel1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(openMessageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 39, Short.MAX_VALUE))
+                                .addComponent(keyLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(openMessageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(246, 293, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGap(2, 2, 2)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(executeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                    .addComponent(keyLabel4)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel1)
+                                                .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(inputThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(executeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(keyLabel)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(inputKey, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
-                        .addGap(71, 71, 71))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                            .addComponent(keyLabel4)
+                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(jLabel1)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(inputThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(cryptoKeyLabel))
+                                                .addGap(0, 47, Short.MAX_VALUE))))
+                                    .addComponent(jScrollPane1)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(inputKey, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(stegoKeyLabel)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(80, 80, 80)
+                                        .addComponent(inputKey1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(71, 71, 71))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -294,13 +310,23 @@ public class SteganoGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(keyLabel3)
                             .addComponent(openImageButton))
                         .addGap(18, 18, 18)
-                        .addComponent(inputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(inputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(keyLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(saveButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(PSNRVal))
+                        .addGap(8, 8, 8)
+                        .addComponent(outputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(keyLabel1)
@@ -310,8 +336,12 @@ public class SteganoGUI extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(inputKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(keyLabel))
+                            .addComponent(cryptoKeyLabel))
                         .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(inputKey1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(stegoKeyLabel))
+                        .addGap(23, 23, 23)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(inputThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -321,26 +351,13 @@ public class SteganoGUI extends javax.swing.JFrame {
                                 .addComponent(executeButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(clearButton))
-                            .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(saveButton)
                             .addComponent(keyLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(keyLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(saveButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(PSNRVal))
-                        .addGap(8, 8, 8)
-                        .addComponent(outputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(42, Short.MAX_VALUE))
         );
 
@@ -354,15 +371,17 @@ public class SteganoGUI extends javax.swing.JFrame {
        if(insertMessageOption.isSelected()){ // do stegano
            
            BufferedImage pictureOutput = null;
+           //set threshold
+           MessageLoader.threshold = Double.parseDouble(inputThreshold.getText());
+           System.out.println(MessageLoader.threshold);
            //get message
-            ArrayList<String> al = new ArrayList<String>();
+           ArrayList<String> al = new ArrayList<String>();
            // The string we want to convert.
-           String letters = "Vincent Theophilus Ciputra";
-           
+           String letters = inputMessage.getText();
            al = ML.toByteMessage(letters);
            ML.toRegions(al);
-           System.out.println("bpcs mes reg before");
-           System.out.println(ML.regions);
+//           System.out.println("bpcs mes reg before");
+//           System.out.println(ML.regions);
            ML.conjugateRegion();
 
            bpcs.messageRegions = ML.regions;
@@ -382,16 +401,12 @@ public class SteganoGUI extends javax.swing.JFrame {
    
        }
        else{ // extract message from stego image
-            System.out.println("a");
+//            System.out.println("a");
             String s = "";
             ML.reverseConjugateRegion();
             bpcs.messageRegions = ML.regions;
-//            System.out.println("bpcs mes reg after");
-//            System.out.println(bpcs.messageRegions);
             
             for(int i=0; i<bpcs.messageRegions.size(); i++){
-//                System.out.println("bit plane convert");
-//                System.out.println(bpcs.getImageMtxBitPlane().get(IL.targetBitPlane.get(i).getKey()).get(IL.targetBitPlane.get(i).getValue()));
                 s += ML.toStringMessage(IL.mtxBitPlane.get(IL.targetBitPlane.get(i).getKey()).get(IL.targetBitPlane.get(i).getValue()));
                 System.out.println(s);
             }
@@ -559,6 +574,7 @@ public class SteganoGUI extends javax.swing.JFrame {
     private javax.swing.JPanel actionPanel;
     private javax.swing.ButtonGroup algoGroup;
     private javax.swing.JButton clearButton;
+    private javax.swing.JLabel cryptoKeyLabel;
     private javax.swing.JCheckBox decryptCheckbox;
     private javax.swing.JCheckBox encryptCheckbox;
     private javax.swing.JButton executeButton;
@@ -566,6 +582,7 @@ public class SteganoGUI extends javax.swing.JFrame {
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JLabel inputImageLabel;
     private javax.swing.JTextField inputKey;
+    private javax.swing.JTextField inputKey1;
     private javax.swing.JTextArea inputMessage;
     private javax.swing.JTextField inputThreshold;
     private javax.swing.JRadioButton insertMessageOption;
@@ -573,7 +590,6 @@ public class SteganoGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel keyLabel;
     private javax.swing.JLabel keyLabel1;
     private javax.swing.JLabel keyLabel2;
     private javax.swing.JLabel keyLabel3;
@@ -584,6 +600,7 @@ public class SteganoGUI extends javax.swing.JFrame {
     private javax.swing.JTextArea outputMessage;
     private javax.swing.JButton saveButton;
     private javax.swing.JButton saveButton1;
+    private javax.swing.JLabel stegoKeyLabel;
     private javax.swing.ButtonGroup styleGroup;
     // End of variables declaration//GEN-END:variables
 }
