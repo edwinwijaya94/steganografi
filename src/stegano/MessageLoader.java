@@ -146,7 +146,8 @@ public class MessageLoader {
         double alpha;
         double threshold = 0.3;
         alpha = (double)complexity(byteMessage)/n;
-        
+//        System.out.println("alpha");
+//        System.out.println(alpha);
         if (alpha >= threshold){
             return true;
         } else {
@@ -197,7 +198,7 @@ public class MessageLoader {
         return this.byteMessage;
     }
     
-    public void main(String[] args) throws UnsupportedEncodingException {
+    public void main(String[] args) {
 
         MessageLoader m = new MessageLoader();
         ArrayList<String> al = new ArrayList<String>();

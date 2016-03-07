@@ -38,7 +38,7 @@ public class ImageLoader {
     ArrayList<ArrayList<String>> arrBitPlane;
     public ArrayList<ArrayList<ArrayList<String>>> mtxBitPlane;
     public ArrayList<ArrayList<ArrayList<String>>> mtxBitPlaneCGC;
-    ArrayList<Pair<Integer,Integer>> targetBitPlane;
+    public ArrayList<Pair<Integer,Integer>> targetBitPlane;
     public int width;
     public int height;
     public byte[] header;
@@ -149,18 +149,18 @@ public class ImageLoader {
             }
         }
 //        System.out.println("count " + count);
-        System.out.println("binary image");
-        for(int i=0; i<8; i++){
-            for(int j=0; j<8; j++)
-                System.out.print(binaryImage.get(i).get(j) + " ");
-            System.out.println();
-        }
-        System.out.println("region");
-        for(int i=0; i<8; i++){
-            for(int j=0; j<8; j++)
-                System.out.print(imageRegions.get(0).get(1).get(i).get(j) + " ");
-            System.out.println();
-        }
+//        System.out.println("binary image");
+//        for(int i=0; i<8; i++){
+//            for(int j=0; j<8; j++)
+//                System.out.print(binaryImage.get(i).get(j) + " ");
+//            System.out.println();
+//        }
+//        System.out.println("region");
+//        for(int i=0; i<8; i++){
+//            for(int j=0; j<8; j++)
+//                System.out.print(imageRegions.get(0).get(1).get(i).get(j) + " ");
+//            System.out.println();
+//        }
         
         //System.out.println("region size" +imageRegions.get(1).size() +" " +imageRegions.size());
     }
@@ -229,10 +229,10 @@ public class ImageLoader {
             for (int j = 0;j<imageRegions.get(i).size();j++){
                 makeArrBitPlane(imageRegions.get(i).get(j));
                 //System.out.println("img reg i j size"+ imageRegions.get(i).get(j).size());
-                if(i==0 && j==1){
-                    System.out.println("arrbitplane");
-                    System.out.println(arrBitPlane);
-                }
+//                if(i==0 && j==1){
+//                    System.out.println("arrbitplane");
+//                    System.out.println(arrBitPlane);
+//                }
                 mtxBitPlane.add(arrBitPlane);
                 mtxBitPlaneCGC.add(arrBitPlane);
             }
@@ -297,6 +297,7 @@ public class ImageLoader {
         for(int i = 0;i<mtxBitPlane.size();i++){
             for (int j = 0;j<mtxBitPlane.get(i).size();j++){
                 if (MessageLoader.isNoiseLikeRegion(mtxBitPlane.get(i).get(j))){
+//                    System.out.println("masuk");
                     targetBitPlane.add(new Pair(i,j));
                 }
             }

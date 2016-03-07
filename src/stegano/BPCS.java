@@ -72,13 +72,19 @@ public class BPCS {
     
     // insert message to byteImage then put to stegoImage
     public int doStegano(){
+//        System.out.println("check");
+//        System.out.println(messageRegions.size() +" "+ imageTargetBitPlane.size() );
         if(messageRegions.size() > imageTargetBitPlane.size()){
+//            System.out.println("overload");
             return 0; // over payload
         }
         else{
+//            System.out.println("ok");
             for(int i=0; i<messageRegions.size(); i++){
                 int a = imageTargetBitPlane.get(i).getKey(); // get region idx
                 int b = imageTargetBitPlane.get(i).getValue(); // get region's bit plane idx
+//                System.out.println("message regions");
+//                System.out.println(messageRegions.get(i));
                 imageMtxBitPlane.get(a).set(b, messageRegions.get(i)); // replace bit plane with message region
             }
         }

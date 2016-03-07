@@ -234,7 +234,7 @@ public class SteganoGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(inputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(keyLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -277,17 +277,18 @@ public class SteganoGUI extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE)))))
                         .addGap(71, 71, 71))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(keyLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(saveButton1)
-                                .addGap(18, 18, 18)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(PSNRVal))
-                            .addComponent(outputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(keyLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(saveButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(outputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(568, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,7 +300,7 @@ public class SteganoGUI extends javax.swing.JFrame {
                             .addComponent(keyLabel3)
                             .addComponent(openImageButton))
                         .addGap(18, 18, 18)
-                        .addComponent(inputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(inputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(keyLabel1)
@@ -321,22 +322,25 @@ public class SteganoGUI extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(clearButton))
                             .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(keyLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(saveButton1)
-                            .addComponent(jLabel2)
-                            .addComponent(PSNRVal))
-                        .addGap(18, 18, 18)
-                        .addComponent(outputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(saveButton)
                             .addComponent(keyLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(keyLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(saveButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(PSNRVal))
+                        .addGap(8, 8, 8)
+                        .addComponent(outputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(42, Short.MAX_VALUE))
         );
 
@@ -347,7 +351,53 @@ public class SteganoGUI extends javax.swing.JFrame {
     
     private void executeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeButtonActionPerformed
         // TODO add your handling code here:
-       
+       if(insertMessageOption.isSelected()){ // do stegano
+           
+           BufferedImage pictureOutput = null;
+           //get message
+            ArrayList<String> al = new ArrayList<String>();
+           // The string we want to convert.
+           String letters = "Vincent Theophilus Ciputra";
+           
+           al = ML.toByteMessage(letters);
+           ML.toRegions(al);
+           System.out.println("bpcs mes reg before");
+           System.out.println(ML.regions);
+           ML.conjugateRegion();
+
+           bpcs.messageRegions = ML.regions;
+           
+           bpcs.doStegano();
+           bpcs.toStegoByteArray();
+           IL.setImageBytes(bpcs.getStegoByteArray());
+   //        IL.setImageBytes(IL.imageBytes);
+
+           try {
+               pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
+           } catch (IOException ex) {
+               Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
+           }
+           ImageIcon iconOut = new ImageIcon(pictureOutput);
+           outputImageLabel.setIcon(iconOut);
+   
+       }
+       else{ // extract message from stego image
+            System.out.println("a");
+            String s = "";
+            ML.reverseConjugateRegion();
+            bpcs.messageRegions = ML.regions;
+//            System.out.println("bpcs mes reg after");
+//            System.out.println(bpcs.messageRegions);
+            
+            for(int i=0; i<bpcs.messageRegions.size(); i++){
+//                System.out.println("bit plane convert");
+//                System.out.println(bpcs.getImageMtxBitPlane().get(IL.targetBitPlane.get(i).getKey()).get(IL.targetBitPlane.get(i).getValue()));
+                s += ML.toStringMessage(IL.mtxBitPlane.get(IL.targetBitPlane.get(i).getKey()).get(IL.targetBitPlane.get(i).getValue()));
+                System.out.println(s);
+            }
+            System.out.println("extract message: " + s);
+            outputMessage.setText(s);
+       }
     }//GEN-LAST:event_executeButtonActionPerformed
 
     private void openMessageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMessageButtonActionPerformed
@@ -454,37 +504,14 @@ public class SteganoGUI extends javax.swing.JFrame {
         IL.allRegionBitPlanes();
         System.out.println("before");
         IL.countComplexity();
+        bpcs.setImageTargetBitPlane(IL.targetBitPlane);
+        System.out.println("target size");
+        System.out.println(IL.targetBitPlane.size());
 //        IL.printMTXBitPlane();
         System.out.println("after");
         System.out.println("CGC");
         
         bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width, IL.height);
-        //get message
-         ArrayList<String> al = new ArrayList<String>();
-	// The string we want to convert.
-	String letters = "Vincent Theophilus Ciputra";
-        
-        al = ML.toByteMessage(letters);
-        ML.toRegions(al);
-        ML.conjugateRegion();
-        
-        bpcs.messageRegions = ML.regions;
-        bpcs.doStegano();
-        bpcs.toStegoByteArray();
-        IL.setImageBytes(bpcs.getStegoByteArray());
-//        IL.setImageBytes(IL.imageBytes);
-
-        try {
-            pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
-        } catch (IOException ex) {
-            Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ImageIcon iconOut = new ImageIcon(pictureOutput);
-        outputImageLabel.setIcon(iconOut);
-//        for (int i = 0;i<IL.getImageBytes().length;i++){
-//            System.out.print(IL.getImageBytes()[i] + " ");
-//        }
-        
         
     }//GEN-LAST:event_openImageButtonActionPerformed
 
