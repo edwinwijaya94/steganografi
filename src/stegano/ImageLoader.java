@@ -85,7 +85,7 @@ public class ImageLoader {
         ArrayList<String> tempBinary = null;
         
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "bmp", baos);
+        ImageIO.write(image, "png", baos);
         baos.flush();
         byte[] bytes = baos.toByteArray();
         oriBytes = bytes.clone();

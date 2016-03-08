@@ -174,7 +174,7 @@ public class MessageLoader {
     
     public void conjugateRegion(){
         for(int i=0;i<regions.size();i++){
-            if(!isNoiseLikeRegion(regions.get(i),threshold)){
+            if(isNoiseLikeRegion(regions.get(i),threshold)){
                 conjugationMap.add(i);
                 for(int j=0;j<8;j++){
                     regions.get(i).set(j, xor(regions.get(i).get(j),wcPattern.get(j)));

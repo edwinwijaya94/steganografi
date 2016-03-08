@@ -25,6 +25,7 @@ import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 /**
  *
@@ -399,29 +400,33 @@ public class SteganoGUI extends javax.swing.JFrame {
 
            bpcs.messageRegions = ML.regions;
            
-           bpcs.doStegano();
-           bpcs.toStegoByteArray();
-           IL.setImageBytes(bpcs.getStegoByteArray());
-   //        IL.setImageBytes(IL.imageBytes);
+           if(bpcs.doStegano()== 1){
+                bpcs.toStegoByteArray();
+                IL.setImageBytes(bpcs.getStegoByteArray());
+        //        IL.setImageBytes(IL.imageBytes);
 
-           try {
-               pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
-           } catch (IOException ex) {
-               Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    pictureOutput = IL.createImageFromBytes(IL.getImageBytes());
+                } catch (IOException ex) {
+                    Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                ImageIcon iconOut = new ImageIcon(pictureOutput);
+                outputImageLabel.setIcon(iconOut);
+
+                //print stego key
+                String stegoKey = "";
+                for(int k=0; k<bpcs.messageRegions.size(); k++){
+                    stegoKey += Integer.toString(bpcs.getImageTargetBitPlane().get(k).getKey())+","+Integer.toString(bpcs.getImageTargetBitPlane().get(k).getValue());
+                    if(k<bpcs.messageRegions.size()-1)
+                        stegoKey += " ";
+     //               System.out.println("stego: "+stegoKey);
+                }
+                this.stegoKey.setText(stegoKey);
+                this.PSNRVal.setText(Double.toString(bpcs.printPSNR(IL.oriBytes, IL.OutImage, IL.width, IL.height)));
            }
-           ImageIcon iconOut = new ImageIcon(pictureOutput);
-           outputImageLabel.setIcon(iconOut);
-           
-           //print stego key
-           String stegoKey = "";
-           for(int k=0; k<bpcs.messageRegions.size(); k++){
-               stegoKey += Integer.toString(bpcs.getImageTargetBitPlane().get(k).getKey())+","+Integer.toString(bpcs.getImageTargetBitPlane().get(k).getValue());
-               if(k<bpcs.messageRegions.size()-1)
-                   stegoKey += " ";
-//               System.out.println("stego: "+stegoKey);
+           else{ // overload message
+               JOptionPane.showMessageDialog(null, "Message Overload !", "InfoBox: " + "Error", JOptionPane.INFORMATION_MESSAGE);
            }
-           this.stegoKey.setText(stegoKey);
-           this.PSNRVal.setText(Double.toString(bpcs.printPSNR(IL.oriBytes, IL.OutImage, IL.width, IL.height)));
        }
        else{ // extract message from stego image
 //            System.out.println("a");
