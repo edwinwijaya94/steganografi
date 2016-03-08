@@ -48,7 +48,6 @@ public class MessageLoader {
     // convert message to matrix of byte
     public ArrayList<String> toByteMessage(String message){
 	byte[] valuesDefault = message.getBytes();
-        
         for(int i=0; i<valuesDefault.length; i++){
             String s = String.format("%8s", Integer.toBinaryString(valuesDefault[i] & 0xFF)).replace(' ', '0');
             byteMessage.add(s);
@@ -58,12 +57,14 @@ public class MessageLoader {
     
     public String toStringMessage(ArrayList<String> segmen){
         String output = "";
+        int countMessage = 0;
         for(int i=0;i<segmen.size();i++){
             for(int j=0;j<=segmen.get(i).length()-8;j+=8){
-                if (segmen.get(i).substring(j, j+8) != "00000000"){
+                
                     int k = Integer.parseInt(segmen.get(i).substring(j, j+8), 2);
                     output += (char) k;
-                }
+                    countMessage++;
+                
             } 
         }
         

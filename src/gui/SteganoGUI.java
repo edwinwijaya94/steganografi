@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -37,6 +38,7 @@ public class SteganoGUI extends javax.swing.JFrame {
     MessageLoader ML;
     BPCS bpcs;
     BufferedImage pictureOutput;
+    int countM;
     /**
      * Creates new form SteganoGUI
      */
@@ -381,12 +383,14 @@ public class SteganoGUI extends javax.swing.JFrame {
            
            // The string we want to convert.
            String letters = inputMessage.getText();
+           countM = letters.length();
            // encrypt with Vigenere
            if(this.encryptCheckbox.isSelected()){
                letters = VC.Encrypt(letters, this.cryptoKey.getText(), 26);
                System.out.println("letters: "+ letters);
                System.out.println("decrypt: "+ VC.Decrypt(letters, this.cryptoKey.getText(), 26));
            }
+           
            al = ML.toByteMessage(letters);
            ML.toRegions(al);
 //           System.out.println("bpcs mes reg before");
@@ -417,6 +421,7 @@ public class SteganoGUI extends javax.swing.JFrame {
 //               System.out.println("stego: "+stegoKey);
            }
            this.stegoKey.setText(stegoKey);
+           this.PSNRVal.setText(Double.toString(bpcs.printPSNR(IL.oriBytes, IL.OutImage, IL.width, IL.height)));
        }
        else{ // extract message from stego image
 //            System.out.println("a");
@@ -435,7 +440,7 @@ public class SteganoGUI extends javax.swing.JFrame {
                s = VC.Decrypt(s, this.cryptoKey.getText(), 26);
                System.out.println("decrypt: " + s);
             }
-            outputMessage.setText(s);
+            outputMessage.setText(s.substring(0,countM));
        }
     }//GEN-LAST:event_executeButtonActionPerformed
 

@@ -43,6 +43,7 @@ public class ImageLoader {
     public int height;
     public byte[] header;
     public byte[] imageBytes;
+    public byte[] oriBytes;
     public byte[] OutImage;
     
     
@@ -87,6 +88,7 @@ public class ImageLoader {
         ImageIO.write(image, "bmp", baos);
         baos.flush();
         byte[] bytes = baos.toByteArray();
+        oriBytes = bytes.clone();
         baos.close();
        header = Arrays.copyOfRange(bytes,0,54);
         
