@@ -43,6 +43,7 @@ public class ImageLoader {
     public int height;
     public byte[] header;
     public byte[] imageBytes;
+    public byte[] OutImage;
     
     
     public ImageLoader(){
@@ -272,9 +273,10 @@ public class ImageLoader {
             out = new FileOutputStream("newPict2.bmp");
             header[18] = (byte)(width/3); //resize width
             header[22] = (byte)(height); // resize height
-            System.out.println("image data");
+//            System.out.println("image data");
             System.out.println(Arrays.copyOfRange(imageData, 0, 100));
-            byte[] OutImage = concatByte(header, imageData);
+            OutImage = concatByte(header, imageData);
+//            System.out.println("outimage: "+OutImage.length);
             out.write(OutImage);
             out.flush();
             System.out.println("inputfile");

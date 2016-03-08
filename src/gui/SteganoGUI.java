@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -34,6 +36,7 @@ public class SteganoGUI extends javax.swing.JFrame {
     ImageLoader IL;
     MessageLoader ML;
     BPCS bpcs;
+    BufferedImage pictureOutput;
     /**
      * Creates new form SteganoGUI
      */
@@ -59,7 +62,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         algoGroup = new javax.swing.ButtonGroup();
         fileChooser = new javax.swing.JFileChooser();
         executeButton = new javax.swing.JButton();
-        inputKey = new javax.swing.JTextField();
+        cryptoKey = new javax.swing.JTextField();
         cryptoKeyLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         inputMessage = new javax.swing.JTextArea();
@@ -74,7 +77,6 @@ public class SteganoGUI extends javax.swing.JFrame {
         encryptCheckbox = new javax.swing.JCheckBox();
         decryptCheckbox = new javax.swing.JCheckBox();
         saveButton = new javax.swing.JButton();
-        clearButton = new javax.swing.JButton();
         keyLabel3 = new javax.swing.JLabel();
         openImageButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -82,11 +84,11 @@ public class SteganoGUI extends javax.swing.JFrame {
         inputImageLabel = new javax.swing.JLabel();
         outputImageLabel = new javax.swing.JLabel();
         keyLabel4 = new javax.swing.JLabel();
-        saveButton1 = new javax.swing.JButton();
+        saveStegoImage = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         PSNRVal = new javax.swing.JLabel();
         stegoKeyLabel = new javax.swing.JLabel();
-        inputKey1 = new javax.swing.JTextField();
+        stegoKey = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("BPCS Stegano");
@@ -100,7 +102,7 @@ public class SteganoGUI extends javax.swing.JFrame {
             }
         });
 
-        inputKey.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cryptoKey.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         cryptoKeyLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cryptoKeyLabel.setText("Crypto Key");
@@ -136,14 +138,25 @@ public class SteganoGUI extends javax.swing.JFrame {
         insertMessageOption.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         insertMessageOption.setSelected(true);
         insertMessageOption.setText("Insert Message");
+        insertMessageOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertMessageOptionActionPerformed(evt);
+            }
+        });
 
         actionGroup.add(extractMesssageOption);
         extractMesssageOption.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         extractMesssageOption.setText("Extract Message");
+        extractMesssageOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                extractMesssageOptionActionPerformed(evt);
+            }
+        });
 
         encryptCheckbox.setText("encrypt");
 
         decryptCheckbox.setText("decrypt");
+        decryptCheckbox.setEnabled(false);
 
         javax.swing.GroupLayout actionPanelLayout = new javax.swing.GroupLayout(actionPanel);
         actionPanel.setLayout(actionPanelLayout);
@@ -182,14 +195,6 @@ public class SteganoGUI extends javax.swing.JFrame {
             }
         });
 
-        clearButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        clearButton.setText("Clear All");
-        clearButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clearButtonActionPerformed(evt);
-            }
-        });
-
         keyLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         keyLabel3.setText("Image :");
 
@@ -215,12 +220,12 @@ public class SteganoGUI extends javax.swing.JFrame {
         keyLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         keyLabel4.setText("Output Message:");
 
-        saveButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        saveButton1.setLabel("Save Image");
-        saveButton1.setName(""); // NOI18N
-        saveButton1.addActionListener(new java.awt.event.ActionListener() {
+        saveStegoImage.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        saveStegoImage.setLabel("Save Image");
+        saveStegoImage.setName(""); // NOI18N
+        saveStegoImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButton1ActionPerformed(evt);
+                saveStegoImageActionPerformed(evt);
             }
         });
 
@@ -233,7 +238,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         stegoKeyLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         stegoKeyLabel.setText("Stego Key");
 
-        inputKey1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        stegoKey.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -255,7 +260,7 @@ public class SteganoGUI extends javax.swing.JFrame {
                                 .addComponent(keyLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(openMessageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(246, 293, Short.MAX_VALUE))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -264,9 +269,7 @@ public class SteganoGUI extends javax.swing.JFrame {
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(executeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(clearButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                .addComponent(executeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -280,17 +283,17 @@ public class SteganoGUI extends javax.swing.JFrame {
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                         .addComponent(inputThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                     .addComponent(cryptoKeyLabel))
-                                                .addGap(0, 47, Short.MAX_VALUE))))
+                                                .addGap(0, 0, Short.MAX_VALUE))))
                                     .addComponent(jScrollPane1)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(inputKey, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(cryptoKey, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(stegoKeyLabel)
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addGap(80, 80, 80)
-                                        .addComponent(inputKey1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(stegoKey, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(71, 71, 71))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -302,9 +305,9 @@ public class SteganoGUI extends javax.swing.JFrame {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(keyLabel2)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(saveButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(saveStegoImage, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(outputImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(568, Short.MAX_VALUE))))
+                        .addContainerGap(598, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,7 +323,7 @@ public class SteganoGUI extends javax.swing.JFrame {
                         .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(keyLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(saveButton1))
+                            .addComponent(saveStegoImage))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -335,23 +338,22 @@ public class SteganoGUI extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(inputKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cryptoKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cryptoKeyLabel))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(inputKey1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(stegoKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(stegoKeyLabel))
                         .addGap(23, 23, 23)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(inputThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(executeButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(clearButton))
-                            .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(35, 35, 35)))
                         .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(saveButton)
@@ -370,14 +372,21 @@ public class SteganoGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
        if(insertMessageOption.isSelected()){ // do stegano
            
-           BufferedImage pictureOutput = null;
+           
            //set threshold
            MessageLoader.threshold = Double.parseDouble(inputThreshold.getText());
            System.out.println(MessageLoader.threshold);
            //get message
            ArrayList<String> al = new ArrayList<String>();
+           
            // The string we want to convert.
            String letters = inputMessage.getText();
+           // encrypt with Vigenere
+           if(this.encryptCheckbox.isSelected()){
+               letters = VC.Encrypt(letters, this.cryptoKey.getText(), 26);
+               System.out.println("letters: "+ letters);
+               System.out.println("decrypt: "+ VC.Decrypt(letters, this.cryptoKey.getText(), 26));
+           }
            al = ML.toByteMessage(letters);
            ML.toRegions(al);
 //           System.out.println("bpcs mes reg before");
@@ -398,7 +407,16 @@ public class SteganoGUI extends javax.swing.JFrame {
            }
            ImageIcon iconOut = new ImageIcon(pictureOutput);
            outputImageLabel.setIcon(iconOut);
-   
+           
+           //print stego key
+           String stegoKey = "";
+           for(int k=0; k<bpcs.messageRegions.size(); k++){
+               stegoKey += Integer.toString(bpcs.getImageTargetBitPlane().get(k).getKey())+","+Integer.toString(bpcs.getImageTargetBitPlane().get(k).getValue());
+               if(k<bpcs.messageRegions.size()-1)
+                   stegoKey += " ";
+//               System.out.println("stego: "+stegoKey);
+           }
+           this.stegoKey.setText(stegoKey);
        }
        else{ // extract message from stego image
 //            System.out.println("a");
@@ -411,6 +429,12 @@ public class SteganoGUI extends javax.swing.JFrame {
                 System.out.println(s);
             }
             System.out.println("extract message: " + s);
+            //decrypt message if needed
+            if(this.decryptCheckbox.isSelected()){
+               System.out.println("s length: " + s.length());
+               s = VC.Decrypt(s, this.cryptoKey.getText(), 26);
+               System.out.println("decrypt: " + s);
+            }
             outputMessage.setText(s);
        }
     }//GEN-LAST:event_executeButtonActionPerformed
@@ -462,16 +486,6 @@ public class SteganoGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveButtonActionPerformed
 
-    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-        try {
-            //clear input output
-            inputMessage.getDocument().remove(0,inputMessage.getDocument().getLength());
-            outputMessage.getDocument().remove(0,outputMessage.getDocument().getLength());
-        } catch (BadLocationException ex) {
-            Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_clearButtonActionPerformed
-
     private void openImageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openImageButtonActionPerformed
         // TODO add your handling code here:
         int returnVal = fileChooser.showOpenDialog(this);
@@ -508,31 +522,57 @@ public class SteganoGUI extends javax.swing.JFrame {
         System.out.println("==================================================================================================================================================================================================");
 //        System.out.println(IL.binaryImage);
         System.out.println("==================================================================================================================================================================================================");
-//        System.out.println("Byte Before");
-//        for (int i = 0;i<IL.getImageBytes().length;i++){
-//            System.out.print(IL.getImageBytes()[i] + " ");
-//        }
         
-        System.out.println("BBB");
         IL.toRegions();
-        System.out.println("CCC");
+        
         IL.allRegionBitPlanes();
-        System.out.println("before");
+        
         IL.countComplexity();
         bpcs.setImageTargetBitPlane(IL.targetBitPlane);
-        System.out.println("target size");
+        
         System.out.println(IL.targetBitPlane.size());
 //        IL.printMTXBitPlane();
-        System.out.println("after");
-        System.out.println("CGC");
         
         bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width, IL.height);
         
     }//GEN-LAST:event_openImageButtonActionPerformed
 
-    private void saveButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButton1ActionPerformed
+    private void saveStegoImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveStegoImageActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_saveButton1ActionPerformed
+        int returnVal = fileChooser.showSaveDialog(this);
+       
+        // process selected file
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+//                System.out.println("outimage: "+IL.OutImage.length);
+                out.write(IL.OutImage);
+                out.flush();
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } else {
+            //System.out.println("File access cancelled by user.");
+        }
+    }//GEN-LAST:event_saveStegoImageActionPerformed
+
+    private void insertMessageOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertMessageOptionActionPerformed
+        // TODO add your handling code here:
+        this.decryptCheckbox.setSelected(false);
+        this.decryptCheckbox.setEnabled(false);
+        this.encryptCheckbox.setEnabled(true);
+    }//GEN-LAST:event_insertMessageOptionActionPerformed
+
+    private void extractMesssageOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractMesssageOptionActionPerformed
+        // TODO add your handling code here:
+        this.encryptCheckbox.setSelected(false);
+        this.encryptCheckbox.setEnabled(false);
+        this.decryptCheckbox.setEnabled(true);
+    }//GEN-LAST:event_extractMesssageOptionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -573,7 +613,7 @@ public class SteganoGUI extends javax.swing.JFrame {
     private javax.swing.ButtonGroup actionGroup;
     private javax.swing.JPanel actionPanel;
     private javax.swing.ButtonGroup algoGroup;
-    private javax.swing.JButton clearButton;
+    private javax.swing.JTextField cryptoKey;
     private javax.swing.JLabel cryptoKeyLabel;
     private javax.swing.JCheckBox decryptCheckbox;
     private javax.swing.JCheckBox encryptCheckbox;
@@ -581,8 +621,6 @@ public class SteganoGUI extends javax.swing.JFrame {
     private javax.swing.JRadioButton extractMesssageOption;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JLabel inputImageLabel;
-    private javax.swing.JTextField inputKey;
-    private javax.swing.JTextField inputKey1;
     private javax.swing.JTextArea inputMessage;
     private javax.swing.JTextField inputThreshold;
     private javax.swing.JRadioButton insertMessageOption;
@@ -599,7 +637,8 @@ public class SteganoGUI extends javax.swing.JFrame {
     private javax.swing.JLabel outputImageLabel;
     private javax.swing.JTextArea outputMessage;
     private javax.swing.JButton saveButton;
-    private javax.swing.JButton saveButton1;
+    private javax.swing.JButton saveStegoImage;
+    private javax.swing.JTextField stegoKey;
     private javax.swing.JLabel stegoKeyLabel;
     private javax.swing.ButtonGroup styleGroup;
     // End of variables declaration//GEN-END:variables

@@ -55,7 +55,7 @@
                               <Component id="keyLabel1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Component id="openMessageButton" min="-2" pref="134" max="-2" attributes="0"/>
-                              <EmptySpace min="246" pref="293" max="32767" attributes="0"/>
+                              <EmptySpace min="246" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -65,10 +65,7 @@
                                           <Group type="102" attributes="0">
                                               <Component id="actionPanel" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="executeButton" max="32767" attributes="0"/>
-                                                  <Component id="clearButton" max="32767" attributes="0"/>
-                                              </Group>
+                                              <Component id="executeButton" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
@@ -87,14 +84,14 @@
                                                   </Group>
                                                   <Component id="cryptoKeyLabel" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="0" pref="47" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
                                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="inputKey" min="-2" pref="338" max="-2" attributes="0"/>
+                                      <Component id="cryptoKey" min="-2" pref="338" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="stegoKeyLabel" min="-2" max="-2" attributes="0"/>
@@ -102,7 +99,7 @@
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
-                                      <Component id="inputKey1" min="-2" pref="338" max="-2" attributes="0"/>
+                                      <Component id="stegoKey" min="-2" pref="338" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
@@ -120,12 +117,12 @@
                               <Group type="102" attributes="0">
                                   <Component id="keyLabel2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="saveButton1" min="-2" pref="139" max="-2" attributes="0"/>
+                                  <Component id="saveStegoImage" min="-2" pref="139" max="-2" attributes="0"/>
                               </Group>
                               <Component id="outputImageLabel" alignment="0" min="-2" pref="240" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="568" max="32767" attributes="0"/>
+                      <EmptySpace pref="598" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -146,7 +143,7 @@
                       <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="keyLabel2" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
-                          <Component id="saveButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="saveStegoImage" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -165,12 +162,12 @@
                       <Component id="jScrollPane1" min="-2" pref="67" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="inputKey" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cryptoKey" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cryptoKeyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="inputKey1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="stegoKey" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="stegoKeyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
@@ -179,13 +176,12 @@
                           <Component id="inputThreshold" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="executeButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="clearButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="actionPanel" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="executeButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -214,7 +210,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="executeButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="inputKey">
+    <Component class="javax.swing.JTextField" name="cryptoKey">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="14" style="0"/>
@@ -350,6 +346,9 @@
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Insert Message"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="insertMessageOptionActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="extractMesssageOption">
           <Properties>
@@ -361,6 +360,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Extract Message"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="extractMesssageOptionActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="encryptCheckbox">
           <Properties>
@@ -370,6 +372,7 @@
         <Component class="javax.swing.JCheckBox" name="decryptCheckbox">
           <Properties>
             <Property name="text" type="java.lang.String" value="decrypt"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -384,17 +387,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="clearButton">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Clear All"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="keyLabel3">
@@ -457,7 +449,7 @@
         <Property name="text" type="java.lang.String" value="Output Message:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="saveButton1">
+    <Component class="javax.swing.JButton" name="saveStegoImage">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="14" style="0"/>
@@ -466,7 +458,7 @@
         <Property name="name" type="java.lang.String" value="" noResource="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveStegoImageActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
@@ -493,7 +485,7 @@
         <Property name="text" type="java.lang.String" value="Stego Key"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="inputKey1">
+    <Component class="javax.swing.JTextField" name="stegoKey">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="14" style="0"/>

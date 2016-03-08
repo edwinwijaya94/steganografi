@@ -92,7 +92,6 @@ public class BPCS {
     }
     
     public void toStegoByteArray(){
-        System.out.println("bitplane " +imageMtxBitPlane.size());
         initRegion();
         
         for(int i=0; i<imageMtxBitPlane.size(); i++){
