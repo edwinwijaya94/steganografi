@@ -208,11 +208,25 @@ public class BPCS {
         }
     }
     
+    public double logbase10(double x) {
+		return Math.log(x) / Math.log(10);
+    }
     
     // count PSNR val
-    public float getPSNR(){
-        
-        return 0;
-    }
+    public double printPSNR(byte[] originalImage, byte[] stegoImage, int m, int n) {
+		
+            double rms = 0;
+            for (int i = 0; i < originalImage.length; i++)
+                    rms += Math.pow(originalImage[i] - stegoImage[i], 2);
+            rms /= (double) (n * m);
+            rms = Math.sqrt(rms);
+            System.err.println("RMS = " + rms);
+            int maxVal = 256;
+            double x = maxVal / rms;
+            double psnr = 20.0 * logbase10(x);
+            System.err.println("PSNR = " + psnr);
+
+            return psnr;
+	}
     
 }

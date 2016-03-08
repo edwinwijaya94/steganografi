@@ -60,8 +60,10 @@ public class MessageLoader {
         String output = "";
         for(int i=0;i<segmen.size();i++){
             for(int j=0;j<=segmen.get(i).length()-8;j+=8){
-                int k = Integer.parseInt(segmen.get(i).substring(j, j+8), 2);
-                output += (char) k;
+                if (segmen.get(i).substring(j, j+8) != "00000000"){
+                    int k = Integer.parseInt(segmen.get(i).substring(j, j+8), 2);
+                    output += (char) k;
+                }
             } 
         }
         
