@@ -85,7 +85,7 @@ public class ImageLoader {
         ArrayList<String> tempBinary = null;
         
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", baos);
+        ImageIO.write(image, "bmp", baos);
         baos.flush();
         byte[] bytes = baos.toByteArray();
         oriBytes = bytes.clone();
@@ -98,7 +98,7 @@ public class ImageLoader {
 //        }
         System.out.println("ori bytes length "+imageBytes.length);
         System.out.println("img bytes");
-        System.out.println(Arrays.copyOfRange(imageBytes, 0, 100));
+//        System.out.println(Arrays.copyOfRange(imageBytes, 0, 100));
         int count = 0;
         int countBin = 0;
         for (int i = 0;i<image.getHeight();i++){
@@ -300,8 +300,10 @@ public class ImageLoader {
     public void countComplexity(){
         for(int i = 0;i<mtxBitPlane.size();i++){
             for (int j = 0;j<mtxBitPlane.get(i).size();j++){
+                System.out.println("ML thres: " + MessageLoader.threshold);
                 if (MessageLoader.isNoiseLikeRegion(mtxBitPlane.get(i).get(j),MessageLoader.threshold)){
 //                    System.out.println("masuk");
+                    System.out.println("complexity: "+MessageLoader.complexity(mtxBitPlane.get(i).get(j)));
                     targetBitPlane.add(new Pair(i,j));
                 }
             }

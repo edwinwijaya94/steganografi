@@ -213,7 +213,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Threshold");
 
-        inputThreshold.setText("0.3");
+        inputThreshold.setText("0.5");
 
         inputImageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -372,13 +372,20 @@ public class SteganoGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void executeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeButtonActionPerformed
-        // TODO add your handling code here:
+
+        //set threshold
+        MessageLoader.threshold = Double.parseDouble(inputThreshold.getText());
+        System.out.println(MessageLoader.threshold);
+        
+        IL.countComplexity();
+        bpcs.setImageTargetBitPlane(IL.targetBitPlane);
+        
+        System.out.println(IL.targetBitPlane.size());
+
+        bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width, IL.height);
+        
        if(insertMessageOption.isSelected()){ // do stegano
            
-           
-           //set threshold
-           MessageLoader.threshold = Double.parseDouble(inputThreshold.getText());
-           System.out.println(MessageLoader.threshold);
            //get message
            ArrayList<String> al = new ArrayList<String>();
            
@@ -521,7 +528,6 @@ public class SteganoGUI extends javax.swing.JFrame {
             Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         IL.setImage(myPicture);
-        System.out.println("AAA");
         
         try {
             IL.toByteImage();
@@ -529,21 +535,13 @@ public class SteganoGUI extends javax.swing.JFrame {
             Logger.getLogger(SteganoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        System.out.println("==================================================================================================================================================================================================");
+//        System.out.println("==================================================================================================================================================================================================");
 //        System.out.println(IL.binaryImage);
-        System.out.println("==================================================================================================================================================================================================");
+//        System.out.println("==================================================================================================================================================================================================");
         
         IL.toRegions();
         
         IL.allRegionBitPlanes();
-        
-        IL.countComplexity();
-        bpcs.setImageTargetBitPlane(IL.targetBitPlane);
-        
-        System.out.println(IL.targetBitPlane.size());
-//        IL.printMTXBitPlane();
-        
-        bpcs.setImageMtxBitPlane( IL.mtxBitPlane, IL.width, IL.height);
         
     }//GEN-LAST:event_openImageButtonActionPerformed
 

@@ -96,9 +96,9 @@ public class MessageLoader {
             regions.get(idxSegmen).add("00000000");
             size++;
         }
-        for(int i=0;i<=idxSegmen;i++){
-            System.out.println(regions.get(i));
-        }
+//        for(int i=0;i<=idxSegmen;i++){
+//            System.out.println(regions.get(i));
+//        }
     }
     
     public static int complexity(ArrayList<String> byteMessage){
@@ -148,10 +148,8 @@ public class MessageLoader {
     public static boolean isNoiseLikeRegion(ArrayList<String> byteMessage, double threshold){
         double n = 112;
         double alpha;
-//        double threshold = 0.3;
         alpha = (double)complexity(byteMessage)/n;
-//        System.out.println("alpha");
-//        System.out.println(alpha);
+        System.out.println("alpha threshold:"+alpha +" "+threshold);
         if (alpha >= threshold){
             return true;
         } else {
@@ -174,7 +172,7 @@ public class MessageLoader {
     
     public void conjugateRegion(){
         for(int i=0;i<regions.size();i++){
-            if(isNoiseLikeRegion(regions.get(i),threshold)){
+            if(!isNoiseLikeRegion(regions.get(i),threshold)){
                 conjugationMap.add(i);
                 for(int j=0;j<8;j++){
                     regions.get(i).set(j, xor(regions.get(i).get(j),wcPattern.get(j)));
