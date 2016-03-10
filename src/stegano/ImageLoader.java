@@ -5,6 +5,8 @@
  */
 package stegano;
 
+import gui.SteganoGUI;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -19,8 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.util.Pair;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -45,7 +50,7 @@ public class ImageLoader {
     public byte[] imageBytes;
     public byte[] oriBytes;
     public byte[] OutImage;
-    
+    public String imagePath;
     
     public ImageLoader(){
         byteImage = new ArrayList<ArrayList<Byte>>();
@@ -81,6 +86,29 @@ public class ImageLoader {
     
     // convert image to matrix of byte
     public void toByteImage() throws IOException{
+        
+        if (imagePath.substring(imagePath.length() - 3).equals("png")){
+            BufferedImage bufferedImage;
+            try {	
+                //read image file
+                bufferedImage = ImageIO.read(new File(imagePath));
+                // create a blank, RGB, same width and height, and a white background
+                BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(),
+                              bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+                newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
+                // write to bmp file
+                ImageIO.write(newBufferedImage, "bmp", new File("asd.bmp"));
+                System.out.println("Done");
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
+
+            BufferedImage myPicture = null;
+            myPicture = ImageIO.read(new File("asd.bmp"));
+            setImage(myPicture);
+        }
+        
+        
         ArrayList<Byte> tempByte = null;
         ArrayList<String> tempBinary = null;
         
@@ -263,35 +291,44 @@ public class ImageLoader {
     }
     
     public BufferedImage createImageFromBytes(byte[] imageData) throws IOException {
-
         FileOutputStream out = null;
         System.out.println("image data size "+ imageData.length);
         try {
-//            InputStream in = new ByteArrayInputStream(imageData);
-//            BufferedImage stegoImg = new BufferedImage(width/3, height, BufferedImage.TYPE_3BYTE_BGR);
-//            stegoImg = ImageIO.read(in);
-//            ImageIO.write(stegoImg, "bmp", new File("newPict2.bmp"));
-            
             out = new FileOutputStream("newPict2.bmp");
             header[18] = (byte)(width/3); //resize width
             header[22] = (byte)(height); // resize height
-//            System.out.println("image data");
             System.out.println(Arrays.copyOfRange(imageData, 0, 100));
             OutImage = concatByte(header, imageData);
-//            System.out.println("outimage: "+OutImage.length);
             out.write(OutImage);
             out.flush();
             System.out.println("inputfile");
         } finally {
             if (out != null) out.close();
         }
-//        System.out.println("new width height " + width/3 +" " + height);
         BufferedImage newImg = new BufferedImage(width/3, height, BufferedImage.TYPE_3BYTE_BGR);
-        
         try{
             newImg = ImageIO.read(new File("newPict2.bmp"));
         }
         catch (IOException e) { }
+        
+        if (imagePath.substring(imagePath.length() - 3).equals("png")){
+            BufferedImage bufferedImage;
+            try {	
+                //read image file
+                bufferedImage = ImageIO.read(new File("newPict2.bmp"));
+                // create a blank, RGB, same width and height, and a white background
+                BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(),
+                              bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+                newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
+                // write to bmp file
+                ImageIO.write(newBufferedImage, "png", new File("out.png"));
+                System.out.println("Done");
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
+            newImg = ImageIO.read(new File("out.png"));
+        }
+        
         
         return newImg;
         

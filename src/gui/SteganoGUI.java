@@ -524,6 +524,7 @@ public class SteganoGUI extends javax.swing.JFrame {
         } else {
             System.out.println("File access cancelled by user.");
         }
+        IL.imagePath = filePath;
         
         //load selected file
         BufferedImage pictureOutput = null;
