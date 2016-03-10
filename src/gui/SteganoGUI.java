@@ -455,12 +455,12 @@ public class SteganoGUI extends javax.swing.JFrame {
                     System.out.println("s length: " + s.length());
                     s = VC.Decrypt(s, this.cryptoKey.getText(), 26);
                     System.out.println("decrypt: " + s);
-                    outputMessage.setText(s.substring(0,countM));
+                    
                 } else {
                     JOptionPane.showMessageDialog(null, "Wrong key !", "InfoBox: " + "Error", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
-           
+           outputMessage.setText(s.substring(0,countM));
        }
     }//GEN-LAST:event_executeButtonActionPerformed
 
