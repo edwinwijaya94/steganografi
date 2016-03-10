@@ -40,6 +40,7 @@ public class SteganoGUI extends javax.swing.JFrame {
     BPCS bpcs;
     BufferedImage pictureOutput;
     int countM;
+    String key;
     /**
      * Creates new form SteganoGUI
      */
@@ -395,6 +396,7 @@ public class SteganoGUI extends javax.swing.JFrame {
            // encrypt with Vigenere
            if(this.encryptCheckbox.isSelected()){
                letters = VC.Encrypt(letters, this.cryptoKey.getText(), 26);
+               key = this.cryptoKey.getText();
                System.out.println("letters: "+ letters);
                System.out.println("decrypt: "+ VC.Decrypt(letters, this.cryptoKey.getText(), 26));
            }
@@ -437,10 +439,11 @@ public class SteganoGUI extends javax.swing.JFrame {
        }
        else{ // extract message from stego image
 //            System.out.println("a");
+            
             String s = "";
             ML.reverseConjugateRegion();
             bpcs.messageRegions = ML.regions;
-            
+
             for(int i=0; i<bpcs.messageRegions.size(); i++){
                 s += ML.toStringMessage(IL.mtxBitPlane.get(IL.targetBitPlane.get(i).getKey()).get(IL.targetBitPlane.get(i).getValue()));
                 System.out.println(s);
@@ -448,11 +451,16 @@ public class SteganoGUI extends javax.swing.JFrame {
             System.out.println("extract message: " + s);
             //decrypt message if needed
             if(this.decryptCheckbox.isSelected()){
-               System.out.println("s length: " + s.length());
-               s = VC.Decrypt(s, this.cryptoKey.getText(), 26);
-               System.out.println("decrypt: " + s);
+                if (key.equals(this.cryptoKey.getText()) ){
+                    System.out.println("s length: " + s.length());
+                    s = VC.Decrypt(s, this.cryptoKey.getText(), 26);
+                    System.out.println("decrypt: " + s);
+                    outputMessage.setText(s.substring(0,countM));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Wrong key !", "InfoBox: " + "Error", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
-            outputMessage.setText(s.substring(0,countM));
+           
        }
     }//GEN-LAST:event_executeButtonActionPerformed
 
